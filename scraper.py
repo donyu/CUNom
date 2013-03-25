@@ -7,6 +7,8 @@ from urllib2 import *
 from bs4 import BeautifulSoup as BS
 
 """
+DD-MMM-YY
+
 for title:
     <div class = "post-title"><a href = "URL">STUFF WE WANT</a></div>
 
@@ -49,7 +51,13 @@ def get_dates(content):
     soup = BS(content)
     dates =[]
     for div in soup.findAll("div", {"class":"post-datetime"}):
-        dates.append(div.get_text().encode('utf-8').strip())
+        date = div.get_text().encode('utf-8').upper().strip().split()
+        date = date[:3] 
+        month = date[0][:3]
+        day = date[1].replace(",", "")
+        year = date[2][-2:]
+        date = str(day) + "-" + str(month) + "-" + str(year)
+        dates.append(date)
     return dates
 
 #scrape the most current free food page
@@ -59,13 +67,9 @@ titles = get_titles(get_page(bwog_url))
 descriptions = get_descriptions(get_page(bwog_url))
 dates = get_dates(get_page(bwog_url))
 
+id = 0
 for title, description, date in zip(titles, descriptions, dates):
-    print date, title, description
+    print "insert into Events values(" + str(id) + ",\'" + title + "\',\'" + description + "\',\'" + date + "\')"
+    id += 1
     print ""
-
-
-
-
-
-
 
