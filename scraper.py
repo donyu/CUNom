@@ -69,7 +69,7 @@ dates = get_dates(get_page(bwog_url))
 
 id = 0
 for title, description, date in zip(titles, descriptions, dates):
-    print "insert into Events values(" + str(id) + ",\'" + title + "\',\'" + description + "\',\'" + date + "\')"
+    print "insert into Events values(" + str(id) + ",\'" + title + "\',\'" + description + "\',\'" + date + "\');"
     id += 1
     print ""
 

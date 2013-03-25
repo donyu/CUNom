@@ -3,7 +3,7 @@ Tonight from 8-10 pm in 414 Pupin, you can snag some free pizza at CU Amnesty In
 Students vs. Teachers: the Right Paradigm for Education Reform?
 A panel discussion featuring Professor Jeffrey Henig of Teachers’ College, Wayne Wilson of Students for Education Reform, Alexander Donovan of Teach for America, and Mike Rady of Columbia’s Education Umbrella. The discussion will compare competing philosophies of education reform, addressing big issues which cities and states face in confronting the achievement gap in urban K-12 public schools. Topics will include performance pay for teachers, testing of student achievement, and the role of charter schools. The panel will conclude with an audience Q&A.
 Sounds tasty interesting.
-Pizza pie via Wikimedia','12-MAR-13')
+Pizza pie via Wikimedia','12-MAR-13');
 
 insert into Events values(1,'Free Food at CU Amnesty International’s Panel','Green and a microphone – get it!?
 Tonight at 9pm, Greenborough is partnering with Barnard Columbia Divest for their biannual open mic night! BCD leaders will be giving a brief overview of what they’re working on before the performances start. It’s sure to be an interesting and fun way to spend the evening! If you are interested in environmental action, good music, or tasty food make sure to check it out!
@@ -13,40 +13,40 @@ Tonight at 9pm, Greenborough is partnering with Barnard Columbia Divest for thei
  
  
 
-An easy solution via Shutterstock','9-MAR-13')
+An easy solution via Shutterstock','9-MAR-13');
 
 insert into Events values(2,'Greenborough Open Mic Night!','Jinkies!
 Amnesty International is having a general body meeting at 9 pm tonight in Earl Hall with free food. What type, we don’t know, but mystery makes life more exciting. Just don’t subject your body to JJ’s again. It begs you.
  
  
 The great food detective via Shutterstock
- ','27-FEB-13')
+ ','27-FEB-13');
 
 insert into Events values(3,'Free the Food!','Today at noon you could decide to leave your midterms and papers behind for a glorious life as a radical hobo OR you could head to the Live at Lerner’s Sounds #8, in the Lerner Piano Lounge from 12-1pm where there will be:
 
 A band: Tumbling Bones. “Think hoedown.”
 Greek food: Rice pilaf, keftedes (meatballs with yogurt dip), greek salad
-An opportunity: Register for Columbia Community Outreach  which will take place this year on 4/6/13','26-FEB-13')
+An opportunity: Register for Columbia Community Outreach  which will take place this year on 4/6/13','26-FEB-13');
 
 insert into Events values(4,'Live at Lerner: Tumbling Bones','Good job guys
 
 Last night at their weekly meeting, Maren Killackey was impressed by CCSC.
 For once, there is no snark. No cheap shots, no embarrassing quotes, or slight misinformation because, let’s face it, no one cares. Before descending into a sappy metaphor about some particularly efficient student government meeting (is there anything more sad?), I’ll leave it at “yesterday’s meeting was everything a CCSC meeting should be. Period.”
 EcoReps stopped by to present on its bike share pilot program, which they’ve been working on for the past few years. After issuing a student interest survey last semester, they realized there’s huge demand among students for such a program. Although they launched a very small scale pilot last spring, the project was just marginally successful, especially since there were only 8 “janky” bikes… and it rained. This year they’re partnering with various bike share contractors around the city to provide a selected number of students 16 or so bikes to use at their leisure (more or less) FOR FREE during the last month of school. When asked about their target demographic, EcoReps answered that in the forseeable future, the bike share would cater to CC and SEAS students (no other schools yet) who want to have a bike in the city but have reservations about something that would take up an all-too dear 12 sq. ft. of space or just don’t want to spend the money to buy one. “Ideally, this would be a school wide initiative,” said Irene Jacqz, SEAS ‘13, who’s part of the EcoReps bike share team, “where grad students and faculty would be able to use it.” But this is a few more years down the road. Though funding is mostly covered now, they hope that as the program expands, CCSC might consider a co-sponsorship.
- ADI, WTF, and more updates after the jump','25-FEB-13')
+ ADI, WTF, and more updates after the jump','25-FEB-13');
 
 insert into Events values(5,'CCSC: Bikes, Penetration, Bagels, WTF?','This is not study abroad
 Are you a SEAS student who wants to learn more about Study Abroad? Do you just want free pizza tonight? If yes, stop by 825 Mudd tonight at 8 PM and your needs will be quenched.
 The meeting will cover all the logistics of engineering study abroad, as well as any other questions attendees may have. There will also be free pizza from Che Bella.
-What the future holds for study abroaders via Shutterstock','18-FEB-13')
+What the future holds for study abroaders via Shutterstock','18-FEB-13');
 
 insert into Events values(6,'Free Food: OverSEAS','A week’s worth of free food is pretty awesome
 The opening ceremony for Engineering Week will take place in Roone Arledge at 6 pm tonight, and there will be a bunch of food from Thai Market that apparently cost someone $2,000 but will cost $0 for you! There will be free food and free T-Shirts throughout the week in celebration of engineering at Columbia and around the nation!
- The week’s schedule after the jump','17-FEB-13')
+ The week’s schedule after the jump','17-FEB-13');
 
 insert into Events values(7,'Free Food for Engineering Week','Awww…Columbia DOES care!
 Sometimes don’t you just feel like Columbia is showering you with love? Okay, okay, so it’s more like grudging acceptance but you take what you can get, right? Well, today Columbia is bursting with free candy and Valentine’s goodies! The Columbia Queer Alliance will be handing out free candy on College Walk today from 11 to 1… And the candy bonanza doesn’t stop there! On the Lerner ramps from 2 to 4 PM, your CSA peer advisors will be giving out free candy wrapped with words of advice and encouragement! You can go eat some sugary treats and, for probably the only time ever, you can feel like Columbia actually loves gives a shit about you!
-Adorbs campus lovin via Shutterstock','14-FEB-13')
+Adorbs campus lovin via Shutterstock','14-FEB-13');
 
 insert into Events values(8,'Free Candy Bonanza!','These artsy posters aren’t for nuthin’
 
@@ -59,10 +59,10 @@ Go to your 1:10 class.
 
 As always, if you want to carefully craft your Wednesday schedule sooner, Live at Lerner has a nifty Facebook page announcing these events (so like it, if you want) and an events page listing who will be playing when (hint: it’s almost always every other Wednesday at noon). Also, they’ve got some artsy signs plastered around campus. Here’s a preview of today’s act, but don’t watch it if you shouldn’t see strobe lights.
 
-Poster via Live at Lerner','13-FEB-13')
+Poster via Live at Lerner','13-FEB-13');
 
 insert into Events values(9,'Live at Lerner: Vensaire','I don’t know, this cake is pretty sexy just the way it is
 
 The Culinary Society is holding their erotic cake competition tonight from 9 -10 in Lerner West Ramp Lounge. Come for a taste and vote for your favorite!
- Cake of beauty via Wikimedia','12-FEB-13')
+ Cake of beauty via Wikimedia','12-FEB-13');
 
