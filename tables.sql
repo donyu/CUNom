@@ -1,18 +1,18 @@
 create table Users(
 	username varchar2(30) primary key,
-	password varchar2(30)
+	password varchar2(30) check (length(password) > 6)
 );
 
 create table Emails(
 	address varchar2(30) primary key,
-	subscribed number(1);
+	subscribed number(1) check (subscribed in (0, 1))
 );
 
 create table has(
 	address varchar2(30),
-	username varchar2(20),
+	username varchar2(30),
 	primary key(address, username),
-	foreign key(address) references Emails,
+	foreign key(address) references Emails on update cascade,
 	foreign key(username) references Users on delete cascade
 );
 
@@ -25,10 +25,10 @@ create table friends_with(
 );
 
 create table SecurityQuestions(
-	q_id number(1) primary key,
+	q_id integer primary key,
 	question varchar2(30),
 	answer varchar2(30),
-	username varchar2(3) not null,
+	username varchar2(30) not null,
 	foreign key(username) references Users on delete cascade
 );
 
@@ -99,9 +99,9 @@ create table preferredLocations(
 );
 
 create table hasPreferences(
-	username varchar2(20),
+	username varchar2(30),
 	p_id integer,
 	primary key(username, p_id),
-	foreign key(username) references Users,
+	foreign key(username) references Users on delete cascade,
 	foreign key(p_id) references Preferences on delete cascade
 );
