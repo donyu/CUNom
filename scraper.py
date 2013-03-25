@@ -43,7 +43,7 @@ def get_descriptions(content):
     soup = BS(content)
     descriptions = []
     for div in soup.findAll("div", {"class":"post-content"}):
-        descriptions.append(div.get_text().encode('utf-8').strip())
+        descriptions.append(div.get_text().encode('utf-8').strip().replace("\'", "''").replace("&", "\&"))
     return descriptions
 
 def get_dates(content):
