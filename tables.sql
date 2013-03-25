@@ -5,23 +5,23 @@ create table Users(
 
 create table Emails(
 	address varchar2(30) primary key,
-	subscribed number(1) check (subscribed in (0, 1))
+	subscribed number(1) check (subscribed = 0 or subscribed = 1))
 );
 
 create table has(
 	address varchar2(30),
 	username varchar2(30),
 	primary key(address, username),
-	foreign key(address) references Emails on update cascade,
+	foreign key(address) references Emails,
 	foreign key(username) references Users on delete cascade
 );
 
 create table friends_with(
-	friend varchar2(30),
-	friended varchar2(30),
-	primary key(friend, friended),
-	foreign key(friend) references Users,
-	foreign key(friended) references Users
+	person_1 varchar2(30),
+	person_2 varchar2(30),
+	primary key(person_1, person_2),
+	foreign key(person_1) references Users on delete cascade,
+	foreign key(person_2) references Users on delete cascade
 );
 
 create table SecurityQuestions(
@@ -40,24 +40,25 @@ create table Events(
 );
 
 create table favorited(
-	username varchar2(20),
+	username varchar2(30),
 	e_id integer,
 	primary key(username, e_id),
-	foreign key(username) references Users,
+	foreign key(username) references Users on delete cascade,
 	foreign key(e_id) references Events
 );
 
 create table Tags(
-	t_id integer,
-	name varchar(20),
-	primary key(t_id)
+	tag_name varchar2(20),
+	primary key(tag_name),
+	constraint bad_tags
+	check (tag_name not in ('ass', 'shit', 'fuck'))
 );
 
 create table tagged_with(
-	t_id integer,
+	tag_name varchar2(20),
 	e_id integer,
-	primary key(t_id, e_id),
-	foreign key(t_id) references Tags.
+	primary key(tag_name, e_id),
+	foreign key(tag_name) references Tags,
 	foreign key(e_id) references Events
 );
 
