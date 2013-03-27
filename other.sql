@@ -1,0 +1,76 @@
+insert into favorited values('sbchou', 2);
+insert into favorited values('sbchou', 1);
+insert into favorited values('sbchou', 7);
+insert into favorited values('tricepat', 3);
+insert into favorited values('don4yu', 8);
+insert into favorited values('don4yu', 1);
+insert into favorited values('sunnylinda', 1);
+insert into favorited values('stephzhou', 3);
+insert into favorited values('stephzhou', 9);
+insert into favorited values('stephzhou', 4);
+
+insert into Locations values(0, 'Lerner Party Space', '2920 Broadway', 'Located in floor 1E of Lerner Hall which is on intersection of 114th and Broadway.');
+insert into Locations values(1, 'Lerner Roone Auditorium', '2920 Broadway', 'Located in floor 1W of Lerner Hall which is on intersection of 114th and Broadway.');
+insert into Locations values(2, 'Lerner East Ramps', '2920 Broadway', 'Located in floor 2E of Lerner Hall which is on intersection of 114th and Broadway.');
+insert into Locations values(3, 'Lerner Broadway Room', '2920 Broadway', 'Located in floor 2W of Lerner Hall which is on intersection of 114th and Broadway.');
+insert into Locations values(4, 'Lerner Roone Cinema', '2920 Broadway', 'Located in floor 2W of Lerner Hall which is on intersection of 114th and Broadway.');
+insert into Locations values(5, 'Lerner West Ramps', '2920 Broadway', 'Located in floor 2W of Lerner Hall which is on intersection of 114th and Broadway.');
+insert into Locations values(6, 'Lerner Room 477', '2920 Broadway', 'Located in floor 4E of Lerner Hall which is on intersection of 114th and Broadway.');
+insert into Locations values(7, 'Lerner Satow Room', '2920 Broadway', 'Located in floor 5E of Lerner Hall which is on intersection of 114th and Broadway.');
+insert into Locations values(8, 'Lerner Room 568e', '2920 Broadway', 'Located in floor 5E of Lerner Hall which is on intersection of 114th and Broadway.');
+insert into Locations values(9, 'Lerner Black Box Theater', '2920 Broadway', 'Located in floor 5E of Lerner Hall which is on intersection of 114th and Broadway.');
+
+insert into located values(0, 0);
+insert into located values(1, 1);
+insert into located values(2, 2);
+insert into located values(3, 3);
+insert into located values(4, 4);
+insert into located values(5, 5);
+insert into located values(6, 6);
+insert into located values(7, 7);
+insert into located values(8, 8);
+insert into located values(9, 9);
+
+insert into Preferences values(1, 0);
+insert into Preferences values(2, 1);
+insert into Preferences values(3, 0);
+insert into Preferences values(4, 0);
+insert into Preferences values(5, 0);
+insert into Preferences values(6, 0);
+insert into Preferences values(7, 0);
+insert into Preferences values(8, 1);
+insert into Preferences values(9, 0);
+insert into Preferences values(0, 1);	
+
+insert into preferredEvents values(1, 4);
+insert into preferredEvents values(1, 5);
+insert into preferredEvents values(1, 9);
+insert into preferredEvents values(3, 2);
+insert into preferredEvents values(3, 4);
+insert into preferredEvents values(4, 1);
+insert into preferredEvents values(6, 1);
+insert into preferredEvents values(7, 1);
+insert into preferredEvents values(7, 3);
+insert into preferredEvents values(7, 5);
+
+insert into preferredLocations values(1, 2);
+insert into preferredLocations values(1, 3);
+insert into preferredLocations values(1, 9);
+insert into preferredLocations values(3, 2);
+insert into preferredLocations values(4, 5);
+insert into preferredLocations values(2, 3);
+insert into preferredLocations values(9, 1);
+insert into preferredLocations values(9, 3);
+insert into preferredLocations values(9, 2);
+insert into preferredLocations values(7, 1);
+
+insert into hasPreferences values('sbchou', 1);
+insert into hasPreferences values('don8yu', 2);
+insert into hasPreferences values('don4yu', 3);
+insert into hasPreferences values('alice01', 4);
+insert into hasPreferences values('cleobc', 5);
+insert into hasPreferences values('caroline', 6);
+insert into hasPreferences values('sunnylinda', 7);
+insert into hasPreferences values('tricepat', 8);
+insert into hasPreferences values('stephzhou', 9);
+insert into hasPreferences values('cmoscardi', 0);					

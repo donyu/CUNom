@@ -1,0 +1,16 @@
+Don Yu dy2212
+Sophie Chou sbc2125
+
+--- query to get all events containing specific tags.
+--- a query like this will be used with the search feature for our website
+select e.name, e.dateof from Events e, Tags t, tagged_with tw where t.tag_name in ('free cake', 'free love', 'ADI') and e.e_id = tw.e_id and tw.tag_name = t.tag_name;
+
+--- query to get all of the friends for a user (i.e. sbchou).
+--- this will be used to display a list of a user's friends
+select u.username from Users u, friends_with fw where u.username = fw.person_2 and fw.person_1 = 'sbchou';
+
+--- query to print out the preferred events of a user.
+--- will be used for when our website presents recommended events to user.
+select e.name, e.dateof from Events e, hasPreferences hp, preferredEvents pe where e.e_id = pe.e_id and pe.p_id = hp.p_id and hp.username = 'sbchou';
+
+exp userid=dy2212/dophie@ADB3 TABLES=Users, Emails, has, friends_with, SecurityQuestions, Events, favorited, Tags, tagged_with, Locations, located, Preferences, preferredEvents, preferredLocations, hasPreferences ROWS=Y

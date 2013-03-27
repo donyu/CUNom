@@ -5,13 +5,13 @@ create table Users(
 
 create table Emails(
 	address varchar2(30) primary key,
-	subscribed number(1) check (subscribed = 0 or subscribed = 1))
+	subscribed number(1) check (subscribed = 0 or subscribed = 1)
 );
 
 create table has(
-	address varchar2(30),
 	username varchar2(30),
-	primary key(address, username),
+	address varchar2(30),
+	primary key(username, address),
 	foreign key(address) references Emails,
 	foreign key(username) references Users on delete cascade
 );
@@ -26,7 +26,7 @@ create table friends_with(
 
 create table SecurityQuestions(
 	q_id integer primary key,
-	question varchar2(30),
+	question varchar2(100),
 	answer varchar2(30),
 	username varchar2(30) not null,
 	foreign key(username) references Users on delete cascade
@@ -34,8 +34,8 @@ create table SecurityQuestions(
 
 create table Events(
 	e_id integer primary key,
-	name varchar2(30),
-	description varchar2(100),
+	name varchar2(100),
+	description varchar2(1000),
 	dateof date
 );
 
@@ -48,14 +48,15 @@ create table favorited(
 );
 
 create table Tags(
-	tag_name varchar2(20),
+	tag_name varchar2(50),
 	primary key(tag_name),
 	constraint bad_tags
+	-- check constraint for curse words
 	check (tag_name not in ('ass', 'shit', 'fuck'))
 );
 
 create table tagged_with(
-	tag_name varchar2(20),
+	tag_name varchar2(50),
 	e_id integer,
 	primary key(tag_name, e_id),
 	foreign key(tag_name) references Tags,
@@ -64,9 +65,9 @@ create table tagged_with(
 
 create table Locations(
 	l_id integer,
-	name varchar2(30),
-	address varchar2(30),
-	directions varchar2(30),
+	name varchar2(50),
+	address varchar2(50),
+	directions varchar2(200),
 	primary key(l_id)
 );
 
@@ -80,6 +81,7 @@ create table located(
 
 create table Preferences(
 	p_id integer,
+	on_or_off number(1) check (on_or_off = 0 or on_or_off = 1),
 	primary key(p_id)
 );
 
