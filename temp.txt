@@ -1,7 +1,7 @@
 insert into Events values(0,'#free food','om nom nom
 Tonight from 8-10 pm in 414 Pupin, you can snag some free pizza at CU Amnesty International’s panel:
 Students vs. Teachers: the Right Paradigm for Education Reform?
-A panel discussion featuring Professor Jeffrey Henig of Teachers’ College, Wayne Wilson of Students for Education Reform, Alexander Donovan of Teach for America, and Mike Rady of Columbia’s Education Umbrella. The discussion will compare competing philosophies of education reform, addressing big issues which cities and states face in confronting the achievement gap in urban K-12 public schools. Topics will include performance pay for teachers, testing of student achievement, and the role of charter schools. The panel will conclude with an audience Q&A.
+A panel discussion featuring Professor Jeffrey Henig of Teachers’ College, Wayne Wilson of Students for Education Reform, Alexander Donovan of Teach for America, and Mike Rady of Columbia’s Education Umbrella. The discussion will compare competing philosophies of education reform, addressing big issues which cities and states face in confronting the achievement gap in urban K-12 public schools. Topics will include performance pay for teachers, testing of student achievement, and the role of charter schools. The panel will conclude with an audience Q\&A.
 Sounds tasty interesting.
 Pizza pie via Wikimedia','12-MAR-13');
 
@@ -65,4 +65,5 @@ insert into Events values(9,'Live at Lerner: Vensaire','I don’t know, this cak
 
 The Culinary Society is holding their erotic cake competition tonight from 9 -10 in Lerner West Ramp Lounge. Come for a taste and vote for your favorite!
  Cake of beauty via Wikimedia','12-FEB-13');
+
 
