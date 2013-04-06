@@ -4,20 +4,18 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/index')
 def index():
-    return "hello world"
-    # if 'username' in session:
-    #     return render_template('index.html',
-    #                            name = session['username'])
-    # return redirect('/login')
+    if 'username' in session:
+        return render_template('index.html', name = session['username'])
+    return redirect('/login')
 
-# @app.route('/login', methods=['GET', 'POST'])
-# def login():
-#     if request.method == 'GET':
-#         return render_template('login.html')
-#     elif request.method == 'POST':
-#         username = request.form['username']
-#         session['username'] = username
-#         return redirect('/')
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+    elif request.method == 'POST':
+        username = request.form['username']
+        session['username'] = username
+        return redirect('/')
     
 
 if __name__ == '__main__':
