@@ -11,12 +11,109 @@
   <link href="http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.css" rel="stylesheet" />
   <link href="/static/css/bootstrap-modal.css" rel="stylesheet"></link>
 
+  <!-- Le fav and touch icons -->
+  <link rel="shortcut icon" href="/static/ico/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/static/ico/apple-touch-icon-144-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/static/ico/apple-touch-icon-114-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/static/ico/apple-touch-icon-72-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" href="/static/ico/apple-touch-icon-57-precomposed.png">
+
   <!-- Le javascript -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/jquery-ui.min.js"></script>
   <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap.js"></script>
+  <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.js"></script>
+  <script src="/static/js/bootstrap-modalmanager.js"></script>
+  <script src="/static/js/bootstrap-modal.js"></script>
 </head>
 <body>
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </a>
+        <a class="brand" href="/">CUNom</a>
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li class="{{ 'active' if request.path == '/' }}"><a href="/">Home</a></li>
+            <li><a href="/food">Foood</a></li>
+          </ul>
+          <ul class="nav pull-right">
+              {%if session['username'] %}
+              <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Welcome, {{session['username']}} <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                      <li><a href="/preferences"><i class="icon-cog"></i> Preferences</a></li>
+                      <li><a href="/dashboard"><i class="icon-envelope"></i> Dashboard</a></li>
+                      <li class="divider"></li>
+                      <li><a href="/logout"><i class="icon-off"></i> Logout</a></li>
+                  </ul>
+              </li>
+              {% else %}
+              <li>
+                  <a role="button" data-toggle="modal" href="#signupModal">Sign Up</a>
+                  <div id="signupModal" class="modal hide fade" tabindex="-1">
+                      <div class="modal-header">
+                          <button class="close" data-dismiss="modal">x</button>
+                          <h3>Sign up to save preferences and subscribe to new free food events!</h3>
+                      </div>
+                      <div class="modal-body">
+                          <div class="row-fluid">
+                              <div class="span12">
+                              <div class="span6">
+                                  <div class="logowrapper">
+                                      <img class="logoicon" src="/static/images/nom.png" alt="nom"/>
+                                  </div>
+                              </div>
+                              <div class="span6">
+                              <form class="form-horizontal" action="/signup" method="post">
+                              <p class="help-block">Username</p>
+                              <div class="input-prepend">
+                              <span class="add-on">*</span><input class="prependedInput" size="16" type="text" name="username">
+                              </div>
+                              <p class="help-block">Email</p>
+                              <div class="input-prepend">
+                              <span class="add-on">*</span><input class="prependedInput" size="16" type="email" name="email">
+                              </div>
+                              <p class="help-block">Password</p>
+                              <div class="input-prepend">
+                                  <span class="add-on">*</span><input class="prependedInput" size="16" type="password" name="password">
+                              </div>
+                              <hr>
+                              <div class="help-block">
+                              <button type="submit" class="btn btn-large btn-info">Sign Up</button>
+                              </div>
+                              </form>
+                              </div>
+                              </div>
+                              </div>
+                              </div>
+                          <div class="modal-footer">
+                              <p><i>Don't want to create an account? Just search for Free Food then!</i></p>
+                          </div>
+                          </div>
+                      </li>
+              <li class="divider-vertical"></li>
+              <li class="dropdown">
+                  <a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <b class="caret"></b></a>
+                    <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
+                        <form method="post" action="/login" accept-charset="UTF-8">
+                            <input style="margin-bottom: 15px;" type="text" placeholder="Username" id="username" name="username">
+                            <input style="margin-bottom: 15px;" type="password" placeholder="Password" id="password" name="password">
+                            <input style="float: left; margin-right: 10px;" type="checkbox" name="remember-me" id="remember-me" value="1">
+                            <label class="string optional" for="user_remember_me"> Remember me</label>
+                            <input class="btn btn-primary btn-block" type="submit" id="sign-in" value="Sign In">
+                        </form>
+                    </div>
+              </li>
+              {% endif %}
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+  </div>
 {% block body %}
 {% endblock %}
 </html>

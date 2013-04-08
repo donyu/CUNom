@@ -1,0 +1,19 @@
+Installing cx_Oracle for Python on Mac OSX
+
+1. Check that you have the correct gcc version
+    $ gcc -v
+    gcc version 4.2.1
+2. Go and install instantclient-basic and instantclient-sdk (64 bit version)
+3. Unzip both downloads and move the sdk directory from instantclient-sdk to instantclient-basic
+4. Go into the sdk folder you just moved and unzip the ottclasses.zip file
+5. Set your environment variables correctly in your .bashrc i.e.
+    export ORACLE_HOME=/Users/utcs/oracle/instantclient_10_2
+    export DYLD_LIBRARY_PATH=$ORACLE_HOME
+    export LD_LIBRARY_PATH=$ORACLE_HOME
+6. Go to your oracle instantclient directory and make the following symbolic links
+    ln -s libclntsh.dylib.10.1 libclntsh.dylib
+    ln -s libocci.dylib.10.1 libocci.dylib
+7. pip install cx_Oracle
+8. hate on Oracle and use MySQL or Mongo instead after this project
+
+Go to http://st-curriculum.oracle.com/obe/db/11g/r2/prod/appdev/opensrclang/python/python.htm to learn how to use cx_Oracle
