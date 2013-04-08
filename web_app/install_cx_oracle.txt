@@ -11,8 +11,8 @@ Installing cx_Oracle for Python on Mac OSX
     export DYLD_LIBRARY_PATH=$ORACLE_HOME
     export LD_LIBRARY_PATH=$ORACLE_HOME
 6. Go to your oracle instantclient directory and make the following symbolic links
-    ln -s libclntsh.dylib.10.1 libclntsh.dylib
-    ln -s libocci.dylib.10.1 libocci.dylib
+    ln -s libclntsh.dylib.11.1 libclntsh.dylib
+    ln -s libocci.dylib.11.1 libocci.dylib
 7. pip install cx_Oracle
 8. hate on Oracle and use MySQL or Mongo instead after this project
 
