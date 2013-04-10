@@ -30,15 +30,18 @@ else:
 #for column_1, column_2, column_3 in cursor.fetchall():
 #    print "Values from DB:", column_1, column_2, column_3
 
-# print everything 
+# print all events  
 cursor = con.cursor()
+
 cursor.execute(
     """
-    select *
-    from Events
-    order by e_id desc
+    select e_id, name, description, dateof
+    from Events 
+    where dateof = '12-MAR-13'
     """
     )
+
+#013-02-12 00:00:00
 
 for e_id, name, description, date in cursor.fetchall():
     print "Event Name:", name

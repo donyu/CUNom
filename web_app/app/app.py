@@ -76,9 +76,77 @@ def login():
             flash('Incorrect Login Credentials')
         return redirect('/')
 
-@app.route('/food')
-def food():
-    return render_template('food.html')
+
+"""
+@app.route('/delete_friend/<friend_name>')
+def delete_friend(friend_name):
+    # delete friend relationship from database
+    cursor = con.cursor()
+    cursor.prepare('delete from friends_with where person_2 = :delete_friend and person_1 = :session_user')
+    cursor.execute(None, {'delete_friend':friend_name, 'session_user':session['username']})
+    con.commit()
+
+    # redirect back to previous page
+    return redirect('/')
+
+
+td><a href="{{url_for('delete_friend', friend_name=friend[0]) }}">X</a></td>
+
+
+"""
+#event search form
+@app.route('/search')
+def search():
+    return render_template('search.html')
+
+#event listings page
+@app.route('/food/<keywords>/<tags>/<location>/<date>')
+def list(keywords, tags, location, date):
+    #cursor = con.cursor()
+    
+    #cursor.execute(
+    #    """
+    #    select *
+    #    from Events
+    #    where dateof = '12-MAR-13'
+    #    """
+    #    )
+
+    #for e_id, name, description, date in cursor.fetchall():
+    #    print "Event Name:", name
+    #    print "Date:", date
+    #    print "Event ID:", e_id
+    #    print "Description:", description
+    #    print 
+
+    #con.commit()
+
+    #session['username'] = "don8yu"
+    #if 'username' in session:
+    events = get_events(keywords, tags, location, date)
+    return render_template('listings.html', name = session['username'], events = events)
+
+
+
+    #return render_template('listings.html')
+
+def get_events(keywords, tags, location, date):
+    cursor = con.cursor()
+    cursor.execute(
+        """
+        select *
+        from Events
+        where dateof = '12-MAR-13'
+        """
+        )
+    #cursor.execute(None, {'session_user':session['username']})
+    return cursor.fetchall()
+
+
+
+
+
+
 
 @app.route('/logout')
 def logout():
