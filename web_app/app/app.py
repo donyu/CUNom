@@ -20,13 +20,45 @@ class LoginForm(Form):
     username = TextField('Username')
     password = PasswordField('Password')
     
+# functions to get manipulate database
+
+def get_friends():
+    cursor = con.cursor()
+    cursor.prepare('select u.username from Users u, friends_with fw where u.username = fw.person_2 and fw.person_1 = :session_user')
+    cursor.execute(None, {'session_user':session['username']})
+    return cursor.fetchall()
+
 @app.route('/')
 @app.route('/index')
 def index():
+    session['username'] = "don8yu"
     if 'username' in session:
-        return render_template('index.html', name = session['username'])
+        friends = get_friends()
+        return render_template('index.html', name = session['username'], friends = friends)
     l_form = LoginForm()
     return render_template('login.html', **{'l_form':l_form})
+
+@app.route('/delete_friend/<friend_name>')
+def delete_friend(friend_name):
+    # delete friend relationship from database
+    cursor = con.cursor()
+    cursor.prepare('delete from friends_with where person_2 = :delete_friend and person_1 = :session_user')
+    cursor.execute(None, {'delete_friend':friend_name, 'session_user':session['username']})
+    con.commit()
+
+    # redirect back to previous page
+    return redirect('/')
+
+@app.route('/add_friend', methods=['POST'])
+def add_friend():
+    # delete friend relationship from database
+    cursor = con.cursor()
+    cursor.prepare('insert into friends_with values(:session_user, :delete_friend)')
+    cursor.execute(None, {'delete_friend':request.form['username'], 'session_user':session['username']})
+    con.commit()
+
+    # redirect back to previous page
+    return redirect('/')
 
 @app.route('/login', methods=['POST'])
 def login():

@@ -23,7 +23,7 @@ Demo Website
             <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Welcome, {{session['username']}} <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <li><a href="/preferences"><i class="icon-cog"></i> Preferences</a></li>
-                    <li><a href="/dashboard"><i class="icon-envelope"></i> Dashboard</a></li>
+                    <li><a href="/"><i class="icon-envelope"></i> Dashboard</a></li>
                     <li class="divider"></li>
                     <li><a href="/logout"><i class="icon-off"></i> Logout</a></li>
                 </ul>
@@ -76,9 +76,12 @@ Demo Website
             <li class="dropdown">
                 <a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <b class="caret"></b></a>
                   <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
+                  		{% from "_form.html" import render_field %}
                       <form method="post" action="/login" accept-charset="UTF-8">
-                          <input style="margin-bottom: 15px;" type="text" placeholder="Username" id="username" name="username">
-                          <input style="margin-bottom: 15px;" type="password" placeholder="Password" id="password" name="password">
+                          <dl>
+                          	{{ render_field(l_form.username, placeholder="Username", style="margin-bottom: 15px;", type="text") }}
+                          	{{ render_field(l_form.password, placeholder="Password", style="margin-bottom: 15px;", type="password") }}
+                          </dl>
                           <input style="float: left; margin-right: 10px;" type="checkbox" name="remember-me" id="remember-me" value="1">
                           <label class="string optional" for="user_remember_me"> Remember me</label>
                           <input class="btn btn-primary btn-block" type="submit" id="sign-in" value="Sign In">
@@ -95,19 +98,43 @@ Demo Website
 <br/>
 <br/>
 <div class="container">
-	<div class="hero-unit">
-	  <h1>Never Miss Free Food Again</h1>
-	  <img src="/static/images/nom.png" height="260" width="260" align="right">        
-	  <hr color="#94D1CA">
-	  <p>
-	  	CUNom helps Columbia students survive the perils of college life. Too often students starve due to the cost of quality food around campus, when in fact free food events happen for nearly every meal of the day everyday. CUNom presents aggregated information from Bwog, Spectator, CCE, and more to allow students to find free food through an easy to use search interface. 
-	  </p>
-    <br/>
-    <a class="btn btn-primary btn-large" href="/food"> I'm Hungry &raquo;</a>
-    <br/>
-    <br/>
-	</div>
-
+	<br/>
+	<br/>
+  <div class="row">
+  	<div class="span1"><a href="http://critterapp.pagodabox.com/others/admin" class="thumbnail"><img src="http://critterapp.pagodabox.com/img/user.jpg" alt=""></a></div>
+  	<div class="span1">
+  	  <p>User </p>
+  	  <p><strong>{{ session['username'] }}</strong></p>
+  	</div>
+  	<div class="span3">
+  		<div class="page-header">
+        <h4>Friends</h4>
+      </div>
+      	<table class="table">
+		      <thead>
+		        <tr>
+		          <th>Friend</th>
+		          <th>Delete</th>
+		          <th style="width: 36px;"></th>
+		        </tr>
+		      </thead>
+		     	<tbody>
+	     			{% if friends %}
+	     				{% for friend in friends %}
+		     				<tr>
+		     					<td>{{friend[0]}}</td>
+		     					<td><a href="{{url_for('delete_friend', friend_name=friend[0]) }}">X</a></td>
+		     				</tr>
+		     			{% endfor %}
+	     			{% endif %}
+	     		</tbody>
+	     	</table>
+	     	<h5>Add Friend</h5>
+	     	<form method="post" action="/add_friend" accept-charset="UTF-8">
+	     		Username: <input class="prependedInput" size="16" type="text" name="username">
+	     		<input class="btn btn-primary btn-block" type="submit" id="sign-in" value="Add +">
+	     	</form>
+		</div>	     
   <hr>
 	<footer>
 	  <p>Developed with Love by @don4yu (Don Yu) & @mpetitchou (Sophie Chou)</p>
