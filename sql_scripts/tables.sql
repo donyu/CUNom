@@ -1,6 +1,6 @@
 create table Users(
 	username varchar2(30) primary key,
-	password varchar2(30) check (length(password) > 6)
+	password varchar2(30) check (length(password) > 3)
 );
 
 create table Emails(
