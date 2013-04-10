@@ -1,6 +1,5 @@
 import cx_Oracle
 from flask import Flask, render_template, redirect, request, session
-# from wtfforms import Form, BooleanField, TextField, PasswordField, validators
 
 app = Flask(__name__)
 
@@ -14,12 +13,6 @@ dsn = cx_Oracle.makedsn(host, port, sid)
 
 # connect and test
 con = cx_Oracle.connect(user, pswd, dsn)
-
-# def username_free(form, field):
-
-# class LoginForm(Form):
-#     username = TextField('username', [validators.Required(), validators.Length(min=4, max=25), username_free])
-#     password = PasswordField('password', [validators.Required(), validators.Length(min=7, max=25)])
 
 @app.route('/')
 @app.route('/index')
