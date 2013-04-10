@@ -97,7 +97,7 @@ def signup():
         con.commit()
     
     # create a session now
-    username = request.form['username']
+    username = request.form['username'] 
     session['username'] = username
     return redirect('/')
 
