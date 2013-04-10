@@ -20,10 +20,11 @@ cursor = con.cursor()
 cursor.prepare('insert into Users values (:new_user, :new_pass)')
 
 cursor.execute(None, {'new_user':'don44', 'new_pass':'ggggggg'})
-# if cursor.fetchone():
-# 	print "already taken"
-# else:
-# 	print "okay"
+
+if cursor.fetchone():
+ 	print "already taken"
+else:
+ 	print "okay"
 
 con.commit()
 cursor.close()
