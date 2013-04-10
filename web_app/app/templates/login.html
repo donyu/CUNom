@@ -17,7 +17,7 @@ CUNom - Free Food
       <div class="nav-collapse">
         <ul class="nav">
           <li class="{{ 'active' if request.path == '/' }}"><a href="/">Home</a></li>
-          <li><a href="/food">Food</a></li>
+          <li class="{{ 'active' if request.path == '/food' }}"><a href="/food">Food</a></li>
         </ul>
         <ul class="nav pull-right">
             {%if session['username'] %}
