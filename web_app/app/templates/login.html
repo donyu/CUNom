@@ -77,9 +77,12 @@ CUNom - Free Food
             <li class="dropdown">
                 <a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <b class="caret"></b></a>
                   <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
+                  		{% from "_form.html" import render_field %}
                       <form method="post" action="/login" accept-charset="UTF-8">
-                          <input style="margin-bottom: 15px;" type="text" placeholder="Username" id="username" name="username">
-                          <input style="margin-bottom: 15px;" type="password" placeholder="Password" id="password" name="password">
+                          <dl>
+                          	{{ render_field(l_form.username, placeholder="Username", style="margin-bottom: 15px;", type="text") }}
+                          	{{ render_field(l_form.password, placeholder="Password", style="margin-bottom: 15px;", type="password") }}
+                          </dl>
                           <input style="float: left; margin-right: 10px;" type="checkbox" name="remember-me" id="remember-me" value="1">
                           <label class="string optional" for="user_remember_me"> Remember me</label>
                           <input class="btn btn-primary btn-block" type="submit" id="sign-in" value="Sign In">
