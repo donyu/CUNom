@@ -28,13 +28,25 @@ def get_friends():
     cursor.execute(None, {'session_user':session['username']})
     return cursor.fetchall()
 
+def get_favorites():
+    cursor = con.cursor()
+    cursor.prepare(
+        """
+        select e.e_id, e.name, e.dateof from Users u, favorited f, Events e 
+        where u.username = f.username and f.e_id = e.e_id and u.username = :session_user
+        """
+        )
+    cursor.execute(None, {'session_user':session['username']})
+    return cursor.fetchall()
+
 @app.route('/')
 @app.route('/index')
 def index():
     session['username'] = "don8yu"
     if 'username' in session:
         friends = get_friends()
-        return render_template('index.html', name = session['username'], friends = friends)
+        favorites = get_favorites()
+        return render_template('index.html', name = session['username'], friends = friends, favorites = favorites)
     l_form = LoginForm()
     return render_template('login.html', **{'l_form':l_form})
 
@@ -44,6 +56,17 @@ def delete_friend(friend_name):
     cursor = con.cursor()
     cursor.prepare('delete from friends_with where person_2 = :delete_friend and person_1 = :session_user')
     cursor.execute(None, {'delete_friend':friend_name, 'session_user':session['username']})
+    con.commit()
+
+    # redirect back to previous page
+    return redirect('/')
+
+@app.route('/delete_favorite/<favorite_id>')
+def delete_favorite(favorite_id):
+    # delete friend relationship from database
+    cursor = con.cursor()
+    cursor.prepare('delete from favorited where e_id = :delete_favorite and username = :session_user')
+    cursor.execute(None, {'delete_favorite':favorite_id, 'session_user':session['username']})
     con.commit()
 
     # redirect back to previous page
@@ -77,23 +100,6 @@ def login():
         return redirect('/')
 
 
-"""
-@app.route('/delete_friend/<friend_name>')
-def delete_friend(friend_name):
-    # delete friend relationship from database
-    cursor = con.cursor()
-    cursor.prepare('delete from friends_with where person_2 = :delete_friend and person_1 = :session_user')
-    cursor.execute(None, {'delete_friend':friend_name, 'session_user':session['username']})
-    con.commit()
-
-    # redirect back to previous page
-    return redirect('/')
-
-
-td><a href="{{url_for('delete_friend', friend_name=friend[0]) }}">X</a></td>
-
-
-"""
 #event search form
 @app.route('/search')
 def search():

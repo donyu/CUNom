@@ -101,7 +101,7 @@ Demo Website
 	<br/>
 	<br/>
   <div class="row">
-  	<div class="span1"><a href="http://critterapp.pagodabox.com/others/admin" class="thumbnail"><img src="http://critterapp.pagodabox.com/img/user.jpg" alt=""></a></div>
+  	<div class="span1"><img src="static/images/user.jpg" alt=""></div>
   	<div class="span1">
   	  <p>User </p>
   	  <p><strong>{{ session['username'] }}</strong></p>
@@ -110,31 +110,58 @@ Demo Website
   		<div class="page-header">
         <h4>Friends</h4>
       </div>
-      	<table class="table">
-		      <thead>
-		        <tr>
-		          <th>Friend</th>
-		          <th>Delete</th>
-		          <th style="width: 36px;"></th>
-		        </tr>
-		      </thead>
-		     	<tbody>
-	     			{% if friends %}
-	     				{% for friend in friends %}
-		     				<tr>
-		     					<td>{{friend[0]}}</td>
-		     					<td><a href="{{url_for('delete_friend', friend_name=friend[0]) }}">X</a></td>
-		     				</tr>
-		     			{% endfor %}
-	     			{% endif %}
-	     		</tbody>
-	     	</table>
-	     	<h5>Add Friend</h5>
-	     	<form method="post" action="/add_friend" accept-charset="UTF-8">
-	     		Username: <input class="prependedInput" size="16" type="text" name="username">
-	     		<input class="btn btn-primary btn-block" type="submit" id="sign-in" value="Add +">
-	     	</form>
-		</div>	     
+    	<table class="table">
+	      <thead>
+	        <tr>
+	          <th>Friend</th>
+	          <th>Delete</th>
+	          <th style="width: 36px;"></th>
+	        </tr>
+	      </thead>
+	     	<tbody>
+     			{% if friends %}
+     				{% for friend in friends %}
+	     				<tr>
+	     					<td>{{friend[0]}}</td>
+	     					<td><a href="{{url_for('delete_friend', friend_name=friend[0]) }}">X</a></td>
+	     				</tr>
+	     			{% endfor %}
+     			{% endif %}
+     		</tbody>
+     	</table>
+     	<h5>Add Friend</h5>
+     	<form method="post" action="/add_friend" accept-charset="UTF-8">
+     		Username: <input class="prependedInput" size="16" type="text" name="username">
+     		<input class="btn btn-primary btn-block" type="submit" id="sign-in" value="Add +">
+     	</form>
+		</div>
+		<div class="span7">
+			<div class="page-header">
+				<h4>Favorites</h4>
+      </div>
+    	<table class="table">
+	      <thead>
+	        <tr>
+	          <th>Event</th>
+	          <th>Date</th>
+	          <th>Delete</th>
+	          <th style="width: 36px;"></th>
+	        </tr>
+	      </thead>
+	     	<tbody>
+     			{% if favorites %}
+     				{% for favorite in favorites %}
+	     				<tr>
+	     					<td>{{favorite[1]}}</td>
+	     					<td>{{favorite[2]}}</td>
+	     					<td><a href="{{url_for('delete_favorite', favorite_id=favorite[0]) }}">X</a></td>
+	     				</tr>
+	     			{% endfor %}
+     			{% endif %}
+     		</tbody>
+     	</table>
+    </div>
+	</div>	     
   <hr>
 	<footer>
 	  <p>Developed with Love by @don4yu (Don Yu) & @mpetitchou (Sophie Chou)</p>
