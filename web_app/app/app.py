@@ -76,24 +76,6 @@ def login():
             flash('Incorrect Login Credentials')
         return redirect('/')
 
-
-"""
-@app.route('/delete_friend/<friend_name>')
-def delete_friend(friend_name):
-    # delete friend relationship from database
-    cursor = con.cursor()
-    cursor.prepare('delete from friends_with where person_2 = :delete_friend and person_1 = :session_user')
-    cursor.execute(None, {'delete_friend':friend_name, 'session_user':session['username']})
-    con.commit()
-
-    # redirect back to previous page
-    return redirect('/')
-
-
-td><a href="{{url_for('delete_friend', friend_name=friend[0]) }}">X</a></td>
-
-
-"""
 #event search form
 @app.route('/search')
 def search():

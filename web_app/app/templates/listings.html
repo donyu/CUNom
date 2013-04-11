@@ -97,7 +97,20 @@ CUNom - Free Food
 <br/>
 <div class="container">
 
-  link back to search
+    <form method = "get" action = "/food">
+      <label class="query" for="query_term">
+        <img alt="Icon-search" height="14" src="http://assets2.grouponcdn.com/images/icons/icon-search.png?RnKF9uZ7" width="14">
+      </label>
+        <input id="query_term" type="text" class="input-just search-query" placeholder="Search for (Event Name)">
+        <input id="query_tags" type="text" class="input-just search-query" placeholder="with Tags (seperate by comma)">
+        <label for="sort_select">Sort by:</label>
+        <select id="sort_select" style="width:150px">
+            <option>Date</option>
+            <option>Name</option>
+            <option>Location</option>
+        </select>
+      <button type="submit" class="btn">Search</button>
+    </form>
 
     <table class="table">
       <thead>
