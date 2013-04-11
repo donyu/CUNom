@@ -82,28 +82,40 @@ def search():
     return render_template('search.html')
 
 #event listings page
-@app.route('/food/<keywords>/<tags>/<location>/<date>')
-def list(keywords, tags, location, date):
+@app.route('/food', methods=['GET', 'POST'])
+def food():
     session['username'] = "don8yu"
+    events = []
     if 'username' in session:
-        events = get_events(keywords, tags, location, date)
-        return render_template('listings.html', name = session['username'], events = events)
+        if request.method == 'POST':
+            print 'hi'
+            keyword = request.form['query_term']
+            events = get_events(keyword, 'tag', 'location', 'date')
+        else:
+            events = get_events("", "", "", "")
+    return render_template('listings.html', name = session['username'], events = events)
 
-
-def get_events(keywords, tags, location, date):
+def get_events(keyword, tag, location, date):
     cursor = con.cursor()
-    cursor.execute(
-        """
-        select *
-        from Events
-        """
-        )
+
+    if not keyword and not tag and not location and not date:
+        cursor.execute(
+            """
+            select *
+            from Events
+            """
+            )
+    else:
+        cursor.execute(
+            """
+            select *
+            from Events
+            where name = :keyword 
+            """,
+            keyword = "Liver at Lerner: Bowmont"
+            )
     #cursor.execute(None, {'session_user':session['username']})
     return cursor.fetchall()
-
-
-
-
 
 
 
