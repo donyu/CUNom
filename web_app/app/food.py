@@ -15,33 +15,70 @@ if (con):
 else:
 	print "BOO"
 
-# try some queries
-#cursor = con.cursor()
-#cursor.arraysize = 50
-#cursor.execute("""
-#       select Col1, Col2, Col3
-#       from SomeTable
-#       where Col4 = :arg_1
-#         and Col5 between :arg_2 and :arg_3""",
-#       arg_1 = "VALUE",
-#       arg_2 = 5,
-#       arg_3 = 15)
 
-#for column_1, column_2, column_3 in cursor.fetchall():
-#    print "Values from DB:", column_1, column_2, column_3
-
-# print all events  
 cursor = con.cursor()
+
+#get keywords
+cursor.execute(
+    """
+    select *
+    from Events 
+    where name like '%Bwog%'
+    """
+    )
+
+print "GET KEYWORD BWOG IN NAME"
+
+for e_id, name, description, date in cursor.fetchall():
+    print "Event Name:", name
+    print "Date:", date
+    print "Event ID:", e_id
+    print "Description:", description
+    print 
+
+#get tags
+cursor.execute(
+    """
+    select distinct Events.name, Tags.tag_name
+    from Events, Tags, tagged_with
+    where Events.e_id = tagged_with.e_id 
+        and Tags.tag_name = tagged_with.tag_name
+    """
+    )
+
+print "GET TAGS"
+
+for name, tag in cursor.fetchall():
+    print "Name:", name
+    print "Tag:", tag
+
+#get location
+cursor.execute(
+    """
+    select distinct Events.name, Locations.name
+    from Events, Locations, located
+    where Events.e_id = located.e_id 
+        and Locations.l_id = located.l_id
+    """
+    )
+
+print "GET LOCATION"
+
+for name, location in cursor.fetchall():
+    print "Name:", name
+    print "Location:", location
+
+
+#get by date
+print "GET DATE 12-MAR-13"
 
 cursor.execute(
     """
-    select e_id, name, description, dateof
+    select *
     from Events 
     where dateof = '12-MAR-13'
     """
     )
-
-#013-02-12 00:00:00
 
 for e_id, name, description, date in cursor.fetchall():
     print "Event Name:", name

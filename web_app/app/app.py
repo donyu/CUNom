@@ -99,7 +99,6 @@ def login():
             flash('Incorrect Login Credentials')
         return redirect('/')
 
-
 #event search form
 @app.route('/search')
 def search():
