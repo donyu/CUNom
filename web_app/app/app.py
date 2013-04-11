@@ -102,33 +102,11 @@ def search():
 #event listings page
 @app.route('/food/<keywords>/<tags>/<location>/<date>')
 def list(keywords, tags, location, date):
-    #cursor = con.cursor()
-    
-    #cursor.execute(
-    #    """
-    #    select *
-    #    from Events
-    #    where dateof = '12-MAR-13'
-    #    """
-    #    )
+    session['username'] = "don8yu"
+    if 'username' in session:
+        events = get_events(keywords, tags, location, date)
+        return render_template('listings.html', name = session['username'], events = events)
 
-    #for e_id, name, description, date in cursor.fetchall():
-    #    print "Event Name:", name
-    #    print "Date:", date
-    #    print "Event ID:", e_id
-    #    print "Description:", description
-    #    print 
-
-    #con.commit()
-
-    #session['username'] = "don8yu"
-    #if 'username' in session:
-    events = get_events(keywords, tags, location, date)
-    return render_template('listings.html', name = session['username'], events = events)
-
-
-
-    #return render_template('listings.html')
 
 def get_events(keywords, tags, location, date):
     cursor = con.cursor()
@@ -136,7 +114,6 @@ def get_events(keywords, tags, location, date):
         """
         select *
         from Events
-        where dateof = '12-MAR-13'
         """
         )
     #cursor.execute(None, {'session_user':session['username']})
