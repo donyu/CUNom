@@ -39,16 +39,49 @@ def get_favorites():
     cursor.execute(None, {'session_user':session['username']})
     return cursor.fetchall()
 
+def get_squestions():
+    cursor = con.cursor()
+    cursor.prepare(
+        """
+        select sq.q_id, sq.question, sq.answer from SecurityQuestions sq, Users u 
+        where u.username = sq.username and u.username = :session_user
+        """
+        )
+    cursor.execute(None, {'session_user':session['username']})
+    return cursor.fetchall()
+
 @app.route('/')
 @app.route('/index')
 def index():
-    session['username'] = "don8yu"
     if 'username' in session:
         friends = get_friends()
         favorites = get_favorites()
         return render_template('index.html', name = session['username'], friends = friends, favorites = favorites)
     l_form = LoginForm()
     return render_template('login.html', **{'l_form':l_form})
+
+@app.route('/preferences')
+def preferences():
+    session['username'] = "don8yu"
+    if 'username' in session:
+        # e_prefs = get_eprefs()
+        # l_prefs = get_lprefs()
+        s_questions = get_squestions()
+        # subscribed = is_user_subscribed()
+        # return render_template('preferences.html', name = session['username'], e_prefs = e_prefs, l_prefs = l_prefs, s_questions = s_questions, subscribed = subscribed)
+        return render_template('preferences.html', name = session['username'], s_questions = s_questions)
+    return redirect('/')
+
+@app.route('/delete_question/<question_id>')
+def delete_question(question_id):
+    # delete friend relationship from database
+    cursor = con.cursor()
+    cursor.prepare('delete from SecurityQuestions where q_id = :delete_question and username = :session_user')
+    cursor.execute(None, {'delete_question':question_id, 'session_user':session['username']})
+    con.commit()
+
+    # redirect back to previous page
+    return redirect('/preferences')
 
 @app.route('/delete_friend/<friend_name>')
 def delete_friend(friend_name):
@@ -63,7 +96,7 @@ def delete_friend(friend_name):
 
 @app.route('/delete_favorite/<favorite_id>')
 def delete_favorite(favorite_id):
-    # delete friend relationship from database
+    # delete favorited relationship from database
     cursor = con.cursor()
     cursor.prepare('delete from favorited where e_id = :delete_favorite and username = :session_user')
     cursor.execute(None, {'delete_favorite':favorite_id, 'session_user':session['username']})
@@ -72,12 +105,26 @@ def delete_favorite(favorite_id):
     # redirect back to previous page
     return redirect('/')
 
+@app.route('/add_question', methods=['POST'])
+def add_question():
+    # add friend relationship from database
+    cursor = con.cursor()
+    # need to figure out next id for this question
+    cursor.execute('select max(q_id) from SecurityQuestions')
+    new_id = int(cursor.fetchone()[0]) + 1
+    cursor.prepare('insert into SecurityQuestions values(:new_id, :question, :answer, :session_user)')
+    cursor.execute(None, {'new_id':new_id, 'question':request.form['question'], 'answer':request.form['answer'], 'session_user':session['username']})
+    con.commit()
+
+    # redirect back to previous page
+    return redirect('/preferences')
+
 @app.route('/add_friend', methods=['POST'])
 def add_friend():
-    # delete friend relationship from database
+    # add friend relationship from database
     cursor = con.cursor()
-    cursor.prepare('insert into friends_with values(:session_user, :delete_friend)')
-    cursor.execute(None, {'delete_friend':request.form['username'], 'session_user':session['username']})
+    cursor.prepare('insert into friends_with values(:session_user, :add_friend)')
+    cursor.execute(None, {'add_friend':request.form['username'], 'session_user':session['username']})
     con.commit()
 
     # redirect back to previous page
