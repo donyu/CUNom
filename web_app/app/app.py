@@ -50,6 +50,30 @@ def get_squestions():
     cursor.execute(None, {'session_user':session['username']})
     return cursor.fetchall()
 
+def get_lprefs():
+    cursor = con.cursor()
+    cursor.prepare(
+        """
+        select distinct pl.p_id, pl.l_id, l.name from 
+        Preferences p, Locations l, preferredLocations pl, Users u, hasPreferences hp
+        where pl.p_id = p.p_id and pl.l_id = l.l_id and p.p_id = hp.p_id and hp.username = :session_user 
+        """
+        )
+    cursor.execute(None, {'session_user':session['username']})
+    return cursor.fetchall()
+
+def get_eprefs():
+    cursor = con.cursor()
+    cursor.prepare(
+        """
+        select distinct el.p_id, el.e_id, e.name from 
+        Preferences p, Events e, preferredEvents el, Users u, hasPreferences hp
+        where el.p_id = p.p_id and el.e_id = e.e_id and p.p_id = hp.p_id and hp.username = :session_user 
+        """
+        )
+    cursor.execute(None, {'session_user':session['username']})
+    return cursor.fetchall()
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -64,13 +88,35 @@ def index():
 def preferences():
     session['username'] = "don8yu"
     if 'username' in session:
-        # e_prefs = get_eprefs()
-        # l_prefs = get_lprefs()
+        e_prefs = get_eprefs()
+        l_prefs = get_lprefs()
         s_questions = get_squestions()
         # subscribed = is_user_subscribed()
         # return render_template('preferences.html', name = session['username'], e_prefs = e_prefs, l_prefs = l_prefs, s_questions = s_questions, subscribed = subscribed)
-        return render_template('preferences.html', name = session['username'], s_questions = s_questions)
+        return render_template('preferences.html', name = session['username'], s_questions = s_questions, l_prefs = l_prefs)
     return redirect('/')
+
+@app.route('/delete_lpref/<p_id>/<l_id>')
+def delete_lpref(p_id, l_id):
+    # delete friend relationship from database
+    cursor = con.cursor()
+    cursor.prepare('delete from preferredLocations where p_id = :p_id and l_id = :l_id')
+    cursor.execute(None, {'p_id':p_id, 'l_id':l_id})
+    con.commit()
+
+    # redirect back to previous page
+    return redirect('/preferences')
+
+@app.route('/delete_epref/<p_id>/<e_id>')
+def delete_epref(p_id, e_id):
+    # delete friend relationship from database
+    cursor = con.cursor()
+    cursor.prepare('delete from preferredEvents where p_id = :p_id and e_id = :e_id')
+    cursor.execute(None, {'p_id':p_id, 'e_id':l_id})
+    con.commit()
+
+    # redirect back to previous page
+    return redirect('/preferences')
 
 @app.route('/delete_question/<question_id>')
 def delete_question(question_id):
