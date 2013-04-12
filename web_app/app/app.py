@@ -283,7 +283,6 @@ def login():
 #event listings page
 @app.route('/food', methods=['GET', 'POST'])
 def food():
-    session['username'] = "don8yu"
     events = []
     if 'username' in session:
         if request.method == 'POST':
