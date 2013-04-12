@@ -1,9 +1,5 @@
 {% extends "base.html" %}
 
-{% block title %}
-CUNom - Free Food
-{% endblock %}
-
 {% block body %}
 <br/>
 <br/>
@@ -14,10 +10,14 @@ CUNom - Free Food
       <label class="query" for="query_term">
       </label>
         <input name="query_term" type="text" class="input-just search-query" placeholder="Search for Term">
-        <input name="query_tag" type="text" class="input-just search-query" placeholder="with Tag">
+        <input name="query_tag" type="text" class="input-just search-query" placeholder="Tags (separated by commas)">
         <input name="query_location" type="text" class="input-just search-query" placeholder="Location">
-        <input name="query_date" type="text" class="input-just search-query" placeholder="In format DD-MMM-YY">
-
+        <div class="input-append date" id="dp3" data-date="12-Mar-13" data-date-format="dd-M-yy">
+          <input class="span2" size="16" type="text" placeholder="dd-MMM-yy" name="query_date">
+          <span class="add-on">
+            <i class="icon-th"></i>
+          </span>
+        </div>
       <button type="submit" class="btn">Search</button>
     </form>
 

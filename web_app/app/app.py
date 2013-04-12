@@ -299,7 +299,8 @@ def food():
         keyword = request.form['query_term']
         tag = request.form['query_tag']
         location = request.form['query_location']
-        date = request.form['query_date']
+        date = str(request.form['query_date']).upper()
+
         events = get_events(keyword, tag, location, date)
         events = [list(e) for e in events]
         for event in events:
@@ -331,31 +332,67 @@ def get_tags(event):
 
 def get_events(keyword, tag, location, dateof):
     cursor = con.cursor()
-    cursor.execute(
-    """
-    select 
-        Events.name, Events.description, Events.dateof, Locations.name, Events.e_id, Locations.l_id
-    from 
-        Events, Tags, tagged_with, Locations, located
-    where
-        Events.e_id = tagged_with.e_id 
-        and Tags.tag_name = tagged_with.tag_name
-        and Locations.l_id = located.l_id
-        and located.e_id = Events.e_id
-        
-        and Events.name like :keyword
-        and Tags.tag_name like :tag
-        and Locations.name like :location
-        and Events.dateof like :dateof
-    group by
-        Events.name, Events.description, Events.dateof, Locations.name, Events.e_id, Locations.l_id
-    """,
-    keyword = '%' + keyword + '%',
-    tag = '%' + tag + '%',
-    location = '%' + location + '%',
-    dateof = '%' + dateof + '%'
-    )
+    if tag:
+        # create tag array
+        tag = [t.encode('utf8').strip() for t in tag.split(',')]
+        tag_str = ''
+        for t in tag:
+            tag_str += t + ", "
+        tag_str = tag_str[:len(tag_str) - 2]
+        print tag_str
+        query_str = """
+        select 
+            Events.name, Events.description, Events.dateof, Locations.name, Events.e_id, Locations.l_id
+        from 
+            Events, Tags, tagged_with, Locations, located
+        where
+            Events.e_id = tagged_with.e_id 
+            and Tags.tag_name = tagged_with.tag_name
+            and Locations.l_id = located.l_id
+            and located.e_id = Events.e_id
+        """
+        query_str += "and Events.name like :keyword "
+        query_str += "and Tags.tag_name in "
+        query_str += "("
+        for t in tag[:len(tag) - 1]:
+            query_str += ":" + t.split()[0] + ", "
+        query_str += ":" + tag[len(tag) - 1].split()[0]
+        query_str += ") and Locations.name like :location and Events.dateof like :dateof"
+        query_str += " group by Events.name, Events.description, Events.dateof, Locations.name, Events.e_id, Locations.l_id"
+        print query_str
+        cursor.prepare(query_str)
+        c_args = {}
+        c_args['keyword'] = '%' + keyword + '%'
 
+        for t in tag:
+            c_args[t.split()[0]] = t
+        c_args['location'] = '%' + location + '%'
+        c_args['dateof'] = '%' + dateof + '%'
+        print c_args
+        cursor.execute(None, c_args)
+    else:
+        cursor.execute(
+        """
+        select 
+            Events.name, Events.description, Events.dateof, Locations.name, Events.e_id, Locations.l_id
+        from 
+            Events, Tags, tagged_with, Locations, located
+        where
+            Events.e_id = tagged_with.e_id 
+            and Tags.tag_name = tagged_with.tag_name
+            and Locations.l_id = located.l_id
+            and located.e_id = Events.e_id
+            
+            and Events.name like :keyword
+            and Locations.name like :location
+            and Events.dateof like :dateof
+        group by
+            Events.name, Events.description, Events.dateof, Locations.name, Events.e_id, Locations.l_id
+        """,
+        keyword = '%' + keyword + '%',
+        location = '%' + location + '%',
+        dateof = '%' + dateof + '%'
+        )
     return cursor.fetchall()
 
 @app.route('/logout')
