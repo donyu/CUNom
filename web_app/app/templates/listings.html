@@ -40,9 +40,9 @@ CUNom - Free Food
               <p>
                 {{event[1]}}
               </p>
-              <p><a class="btn" href="{{url_for('add_favorite', e_id = event[5])}}">Favorite</a></p>
-              <p><a class="btn" href="{{url_for('add_epref', e_id = event[5])}}">Prefer Event +</a></p>
-              <p><a class="btn" href="{{url_for('add_lpref', l_id = event[6])}}">Prefer Location +</a></p>
+              <p><a class="btn" href="{{url_for('add_favorite', e_id = event[4])}}">Favorite</a></p>
+              <p><a class="btn" href="{{url_for('add_epref', e_id = event[4])}}">Prefer Event +</a></p>
+              <p><a class="btn" href="{{url_for('add_lpref', l_id = event[5])}}">Prefer Location +</a></p>
             </div>
           </div>
           <div class="row">
@@ -50,7 +50,7 @@ CUNom - Free Food
               <p></p>
               <p>
                 <i class="icon-calendar"></i> {{event[2]}}
-                | <i class="icon-share"></i> <a href="#">{{event[4]}}</a>
+                | <i class="icon-share"></i> {{event[3]}}
                 | <i class="icon-tags"></i> Tags : <a href="#"><span class="label label-info">Snipp</span></a> 
                 <a href="#"><span class="label label-info">Bootstrap</span></a> 
                 <a href="#"><span class="label label-info">UI</span></a> 

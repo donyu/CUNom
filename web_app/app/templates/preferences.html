@@ -100,7 +100,7 @@ Demo Website
      				{% for pref in e_prefs %}
 	     				<tr>
 	     					<td>{{pref[2]}}</td>
-	     					<td><a href="{{url_for('delete_epref', p_id = pref[0], l_id = pref[1]) }}">X</a></td>
+	     					<td><a href="{{url_for('delete_epref', p_id = pref[0], e_id = pref[1]) }}">X</a></td>
 	     				</tr>
 	     			{% endfor %}
      			{% endif %}

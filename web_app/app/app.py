@@ -76,7 +76,12 @@ def get_eprefs():
 
 def get_p_id():
     cursor = con.cursor()
-    cursor.execute("select ")
+    cursor.execute("""
+        select p.p_id from Preferences p, hasPreferences hp, Users u
+        where u.username = :session_user and hp.username = u.username
+        and p.p_id = hp.p_id
+        """, session_user = session['username'])
+    return cursor.fetchone()[0]
 
 def is_user_subscribed():
     cursor = con.cursor()
@@ -159,7 +164,7 @@ def delete_epref(p_id, e_id):
     # delete friend relationship from database
     cursor = con.cursor()
     cursor.prepare('delete from preferredEvents where p_id = :p_id and e_id = :e_id')
-    cursor.execute(None, {'p_id':p_id, 'e_id':l_id})
+    cursor.execute(None, {'p_id':p_id, 'e_id':e_id})
     con.commit()
 
     # redirect back to previous page
@@ -198,7 +203,7 @@ def delete_favorite(favorite_id):
     # redirect back to previous page
     return redirect('/')
 
-@app.route('/add_favorite/<e_id>', methods=['POST'])
+@app.route('/add_favorite/<e_id>')
 def add_favorite(e_id):
     cursor = con.cursor()
     cursor.prepare('insert into favorited values(:session_user, :e_id)')
@@ -206,28 +211,29 @@ def add_favorite(e_id):
     con.commit()
 
     # redirect back to previous page
-    return redirect('/')
+    return redirect('/food')
 
-@app.route('/add_lpref/<l_id>', methods=['POST'])
+@app.route('/add_lpref/<l_id>')
 def add_lpref(l_id):
     cursor = con.cursor()
-    curs
-    cursor.prepare('insert into values(:session_user, :e_id)')
-    cursor.execute(None, {'session_user':session['username'], 'e_id':e_id})
+    p_id = get_p_id()
+    cursor.prepare('insert into preferredLocations values(:p_id, :l_id)')
+    cursor.execute(None, {'p_id':p_id, 'l_id':l_id})
     con.commit()
 
     # redirect back to previous page
-    return redirect('/')
+    return redirect('/food')
 
-@app.route('/add_epref/<e_id>', methods=['POST'])
+@app.route('/add_epref/<e_id>')
 def add_epref(e_id):
     cursor = con.cursor()
-    cursor.prepare('insert into favorited values(:session_user, :e_id)')
-    cursor.execute(None, {'session_user':session['username'], 'e_id':e_id})
+    p_id = get_p_id()
+    cursor.prepare('insert into preferredEvents values(:p_id, :e_id)')
+    cursor.execute(None, {'p_id':p_id, 'e_id':e_id})
     con.commit()
 
     # redirect back to previous page
-    return redirect('/')
+    return redirect('/food')
 
 @app.route('/add_question', methods=['POST'])
 def add_question():
@@ -295,7 +301,7 @@ def get_events(keyword, tag, location, dateof):
     cursor.execute(
     """
     select 
-        Events.name, Events.description, Events.dateof, Locations.name
+        Events.name, Events.description, Events.dateof, Locations.name, Events.e_id, Locations.l_id
     from 
         Events, Tags, tagged_with, Locations, located
     where
@@ -309,7 +315,7 @@ def get_events(keyword, tag, location, dateof):
         and Locations.name like :location
         and Events.dateof like :dateof
     group by
-        Events.name, Events.description, Events.dateof, Locations.name
+        Events.name, Events.description, Events.dateof, Locations.name, Events.e_id, Locations.l_id
     """,
     keyword = '%' + keyword + '%',
     tag = '%' + tag + '%',
