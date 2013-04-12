@@ -74,6 +74,28 @@ def get_eprefs():
     cursor.execute(None, {'session_user':session['username']})
     return cursor.fetchall()
 
+def is_user_subscribed():
+    cursor = con.cursor()
+    cursor.prepare(
+        """
+        select subscribed from Users u, has h, Emails e 
+        where u.username = :session_user and h.username = u.username and h.address = e.address
+        """
+        )
+    cursor.execute(None, {'session_user':session['username']})
+    return cursor.fetchone()
+
+def get_email():
+    cursor = con.cursor()
+    cursor.prepare(
+        """
+        select e.address from Users u, has h, Emails e 
+        where u.username = :session_user and h.username = u.username and h.address = e.address
+        """
+        )
+    cursor.execute(None, {'session_user':session['username']})
+    return cursor.fetchone()
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -91,10 +113,31 @@ def preferences():
         e_prefs = get_eprefs()
         l_prefs = get_lprefs()
         s_questions = get_squestions()
-        # subscribed = is_user_subscribed()
-        # return render_template('preferences.html', name = session['username'], e_prefs = e_prefs, l_prefs = l_prefs, s_questions = s_questions, subscribed = subscribed)
-        return render_template('preferences.html', name = session['username'], s_questions = s_questions, l_prefs = l_prefs)
+        subscribed = is_user_subscribed()
+        email = get_email()
+        return render_template('preferences.html', name = session['username'], s_questions = s_questions, l_prefs = l_prefs, e_prefs = e_prefs, email = email, subscribed = subscribed)
     return redirect('/')
+
+@app.route('/change_email', methods = ['POST'])
+def change_email():
+    email = request.form['email']
+    past_email = get_email()[0]
+    subscribed = request.form['subscribed_select']
+    subscribed = 1 if subscribed == "Yes" else 0
+
+    # change email settings for user
+    cursor = con.cursor()
+    cursor.prepare('insert into Emails values(:email, :subscribed)')
+    cursor.execute(None, {'email':email, 'subscribed':subscribed})
+
+    # now we change has table
+    cursor.prepare('update has set address = :email where username = :username')
+    cursor.execute(None, {'email':email, 'username':session['username']})
+    cursor.prepare('delete from Emails where address = :past_email')
+    cursor.execute(None, {'past_email':past_email})
+    con.commit()
+
+    return redirect('/preferences')
 
 @app.route('/delete_lpref/<p_id>/<l_id>')
 def delete_lpref(p_id, l_id):
@@ -169,6 +212,10 @@ def add_question():
 def add_friend():
     # add friend relationship from database
     cursor = con.cursor()
+    cursor.execute('select username from Users where username = :friend', friend = request.form['username'])
+    if not cursor.fetchone():
+        flash('This user does not exist. Ask your friend for his real username')
+        return redirect('/')
     cursor.prepare('insert into friends_with values(:session_user, :add_friend)')
     cursor.execute(None, {'add_friend':request.form['username'], 'session_user':session['username']})
     con.commit()
