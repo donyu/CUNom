@@ -117,7 +117,6 @@ def index():
 
 @app.route('/preferences')
 def preferences():
-    session['username'] = "don8yu"
     if 'username' in session:
         e_prefs = get_eprefs()
         l_prefs = get_lprefs()
