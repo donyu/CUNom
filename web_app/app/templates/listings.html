@@ -23,6 +23,7 @@
             <i class="icon-th"></i>
           </span>
         </div>
+        <br/>
       <button type="submit" class="btn">Search</button>
     </form>
 
@@ -57,10 +58,23 @@
               <p></p>
               <p>
                 <i class="icon-calendar"></i> {{event[2]}}
-                | <i class="icon-share"></i> {{event[3]}}
+                | <i class="icon-share"></i> 
+                <a role="button" data-toggle="modal" href="#{{event[5]}}Modal">{{event[3]}}</a>
+                <div id="{{event[5]}}Modal" class="modal hide fade" tabindex="-1">
+                    <div class="modal-header">
+                        <button class="close" data-dismiss="modal">x</button>
+                        <h3>{{event[3]}} Location Information</h3>
+                    </div>
+                    <div class="modal-body">
+                      <h5>Address</h5>
+                      <p>{{event[6]}}</p>
+                      <h5>Directions</h5>
+                      <p>{{event[7]}}</p>
+                    </div>
+                  </div>
                 | <i class="icon-tags"></i> Tags : 
-                {% if event[6] %}
-                  {% for tag in event[6] %}
+                {% if event[8] %}
+                  {% for tag in event[8] %}
                     <span class="label label-info">{{tag[0]}}</span>
                   {% endfor %}
                 {% endif %}

@@ -56,60 +56,71 @@
      		<input class="btn btn-primary btn-block" type="submit" id="sign-in" value="Add +">
      	</form>
     </div>
-  	<div class="span3">
-  		<div class="page-header">
-        <h4>Preferred Locations</h4>
-      </div>
-    	<table class="table">
-	      <thead>
-	        <tr>
-	          <th>Location</th>
-	          <th>Delete</th>
-	          <th style="width: 36px;"></th>
-	        </tr>
-	      </thead>
-	     	<tbody>
-     			{% if l_prefs %}
-     				{% for pref in l_prefs %}
-	     				<tr>
-	     					<td>{{pref[2]}}</td>
-	     					<td><a href="{{url_for('delete_lpref', p_id = pref[0], l_id = pref[1]) }}">X</a></td>
-	     				</tr>
-	     			{% endfor %}
-     			{% endif %}
-     		</tbody>
-     	</table>
-		</div>
-  	<div class="span3">
-  		<div class="page-header">
-        <h4>Preferred Events</h4>
-      </div>
-    	<table class="table">
-	      <thead>
-	        <tr>
-	          <th>Event</th>
-	          <th>Delete</th>
-	          <th style="width: 36px;"></th>
-	        </tr>
-	      </thead>
-	     	<tbody>
-     			{% if e_prefs %}
-     				{% for pref in e_prefs %}
-	     				<tr>
-	     					<td>{{pref[2]}}</td>
-	     					<td><a href="{{url_for('delete_epref', p_id = pref[0], e_id = pref[1]) }}">X</a></td>
-	     				</tr>
-	     			{% endfor %}
-     			{% endif %}
-     		</tbody>
-     	</table>
+    <div class="span1"></div>
+    <div class="span6">
+    	<div class="row">
+		  	<div class="span3">
+		  		<div class="page-header">
+		        <h4>Preferred Locations</h4>
+		      </div>
+		    	<table class="table">
+			      <thead>
+			        <tr>
+			          <th>Location</th>
+			          <th>Delete</th>
+			          <th style="width: 36px;"></th>
+			        </tr>
+			      </thead>
+			     	<tbody>
+		     			{% if l_prefs %}
+		     				{% for pref in l_prefs %}
+			     				<tr>
+			     					<td>{{pref[2]}}</td>
+			     					<td><a href="{{url_for('delete_lpref', p_id = pref[0], l_id = pref[1]) }}">X</a></td>
+			     				</tr>
+			     			{% endfor %}
+		     			{% endif %}
+		     		</tbody>
+		     	</table>
+				</div>
+		  	<div class="span3">
+		  		<div class="page-header">
+		        <h4>Preferred Events</h4>
+		      </div>
+		    	<table class="table">
+			      <thead>
+			        <tr>
+			          <th>Event</th>
+			          <th>Delete</th>
+			          <th style="width: 36px;"></th>
+			        </tr>
+			      </thead>
+			     	<tbody>
+		     			{% if e_prefs %}
+		     				{% for pref in e_prefs %}
+			     				<tr>
+			     					<td>{{pref[2]}}</td>
+			     					<td><a href="{{url_for('delete_epref', p_id = pref[0], e_id = pref[1]) }}">X</a></td>
+			     				</tr>
+			     			{% endfor %}
+		     			{% endif %}
+		     		</tbody>
+		     	</table>
+				</div>
+			</div>
+			<div class="row">
+				{% if p_on_off %}
+					<p>Emails will currently be sent with preferences turned on. To get more generic daily free food emails, please click
+						<a href="/update_p_on_off/0">here</a>.
+					</p>
+				{% else %}
+					<p>Emails are currently sent without any preference information. To get more personalized daily free food emails, please click
+						<a href="/update_p_on_off/1">here</a>.
+					</p>
+				{% endif %}
+			</div>
 		</div>
 	</div>	    
-	<div class="row"> 
-		<div class="span4">
-			
-		</div>
-	</div>
   <hr>
 	<footer>
 	  <p>Developed with Love by @don4yu (Don Yu) & @mpetitchou (Sophie Chou)</p>

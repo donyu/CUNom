@@ -110,6 +110,15 @@ def get_email():
     cursor.execute(None, {'session_user':session['username']})
     return cursor.fetchone()
 
+def get_p_on_off():
+    cursor = con.cursor()
+    cursor.execute("""
+        select p.on_or_off from Preferences p, hasPreferences hp, Users u
+        where u.username = :session_user and hp.username = u.username
+        and p.p_id = hp.p_id
+        """, session_user = session['username'])
+    return cursor.fetchone()[0]
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -127,8 +136,9 @@ def preferences():
         l_prefs = get_lprefs()
         s_questions = get_squestions()
         subscribed = is_user_subscribed()
+        p_on_off = get_p_on_off()
         email = get_email()
-        return render_template('preferences.html', name = session['username'], s_questions = s_questions, l_prefs = l_prefs, e_prefs = e_prefs, email = email, subscribed = subscribed)
+        return render_template('preferences.html', name = session['username'], p_on_off = p_on_off, s_questions = s_questions, l_prefs = l_prefs, e_prefs = e_prefs, email = email, subscribed = subscribed)
     return redirect('/')
 
 @app.route('/change_email', methods = ['POST'])
@@ -235,6 +245,17 @@ def add_lpref(l_id):
 
     # redirect back to previous page
     return redirect('/food')
+
+@app.route('/update_p_on_off/<on_off>')
+def update_p_on_off(on_off):
+    cursor = con.cursor()
+    p_id = get_p_id()
+    cursor.prepare('update Preferences set on_or_off = :on_off where p_id = :p_id')
+    cursor.execute(None, {'p_id':p_id, 'on_off':on_off})
+    con.commit()
+
+    # redirect back to previous page
+    return redirect('/preferences')
 
 @app.route('/add_epref/<e_id>')
 def add_epref(e_id):
@@ -345,7 +366,7 @@ def get_events(keyword, tag, location, dateof):
         print tag_str
         query_str = """
         select 
-            Events.name, Events.description, Events.dateof, Locations.name, Events.e_id, Locations.l_id
+            Events.name, Events.description, Events.dateof, Locations.name, Events.e_id, Locations.l_id, Locations.address, Locations.directions
         from 
             Events, Tags, tagged_with, Locations, located
         where
@@ -354,14 +375,14 @@ def get_events(keyword, tag, location, dateof):
             and Locations.l_id = located.l_id
             and located.e_id = Events.e_id
         """
-        query_str += "and Events.name like :keyword "
+        query_str += "and (Events.name like :keyword or Events.description like :keyword) "
         query_str += "and Tags.tag_name in "
         query_str += "("
         for t in tag[:len(tag) - 1]:
             query_str += ":" + t.split()[0] + ", "
         query_str += ":" + tag[len(tag) - 1].split()[0]
         query_str += ") and Locations.name like :location and Events.dateof like :dateof"
-        query_str += " group by Events.name, Events.description, Events.dateof, Locations.name, Events.e_id, Locations.l_id"
+        query_str += " group by Events.name, Events.description, Events.dateof, Locations.name, Events.e_id, Locations.l_id, Locations.address, Locations.directions"
         print query_str
         cursor.prepare(query_str)
         c_args = {}
@@ -377,7 +398,7 @@ def get_events(keyword, tag, location, dateof):
         cursor.execute(
         """
         select 
-            Events.name, Events.description, Events.dateof, Locations.name, Events.e_id, Locations.l_id
+            Events.name, Events.description, Events.dateof, Locations.name, Events.e_id, Locations.l_id, Locations.address, Locations.directions
         from 
             Events, Tags, tagged_with, Locations, located
         where
@@ -386,11 +407,11 @@ def get_events(keyword, tag, location, dateof):
             and Locations.l_id = located.l_id
             and located.e_id = Events.e_id
             
-            and Events.name like :keyword
+            and (Events.name like :keyword or Events.description like :keyword)
             and Locations.name like :location
             and Events.dateof like :dateof
         group by
-            Events.name, Events.description, Events.dateof, Locations.name, Events.e_id, Locations.l_id
+            Events.name, Events.description, Events.dateof, Locations.name, Events.e_id, Locations.l_id, Locations.address, Locations.directions
         """,
         keyword = '%' + keyword + '%',
         location = '%' + location + '%',
