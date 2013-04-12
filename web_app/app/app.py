@@ -99,6 +99,7 @@ def get_events(keyword, tag, location, date):
     cursor = con.cursor()
 
     if not keyword and not tag and not location and not date:
+        #list all
         cursor.execute(
             """
             select *
@@ -110,9 +111,9 @@ def get_events(keyword, tag, location, date):
             """
             select *
             from Events
-            where name = :keyword 
+            where name like :keyword 
             """,
-            keyword = "Liver at Lerner: Bowmont"
+            keyword = '%'+keyword + '%'
             )
     #cursor.execute(None, {'session_user':session['username']})
     return cursor.fetchall()
