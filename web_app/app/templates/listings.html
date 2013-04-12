@@ -40,9 +40,11 @@ CUNom - Free Food
               <p>
                 {{event[1]}}
               </p>
+              {% if session['username'] %}
               <p><a class="btn" href="{{url_for('add_favorite', e_id = event[4])}}">Favorite</a></p>
               <p><a class="btn" href="{{url_for('add_epref', e_id = event[4])}}">Prefer Event +</a></p>
               <p><a class="btn" href="{{url_for('add_lpref', l_id = event[5])}}">Prefer Location +</a></p>
+              {% endif %}
             </div>
           </div>
           <div class="row">

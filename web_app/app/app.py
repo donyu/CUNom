@@ -295,24 +295,28 @@ def login():
 @app.route('/food', methods=['GET', 'POST'])
 def food():
     events = []
+    if request.method == 'POST':
+        keyword = request.form['query_term']
+        tag = request.form['query_tag']
+        location = request.form['query_location']
+        date = request.form['query_date']
+        events = get_events(keyword, tag, location, date)
+        events = [list(e) for e in events]
+        for event in events:
+            tags = get_tags(event)
+            event.append(tags)
+    else:
+        events = get_events("", "", "", "")
+        events = [list(e) for e in events]
+        for event in events:
+            tags = get_tags(event)
+            event.append(tags)
     if 'username' in session:
-        if request.method == 'POST':
-            keyword = request.form['query_term']
-            tag = request.form['query_tag']
-            location = request.form['query_location']
-            date = request.form['query_date']
-            events = get_events(keyword, tag, location, date)
-            events = [list(e) for e in events]
-            for event in events:
-                tags = get_tags(event)
-                event.append(tags)
-        else:
-            events = get_events("", "", "", "")
-            events = [list(e) for e in events]
-            for event in events:
-                tags = get_tags(event)
-                event.append(tags)
-    return render_template('listings.html', name = session['username'], events = events)
+        return render_template('listings.html', name = session['username'], events = events)
+    else:
+        l_form = LoginForm()
+        return render_template('listings.html', events = events, l_form = l_form)
+
 
 def get_tags(event):
     cursor = con.cursor()
