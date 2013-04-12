@@ -5,15 +5,20 @@
 <br/>
 <br/>
 <div class="container">
-
+  {% from "_form.html" import render_field %}
     <form method = "post" action = "/food">
       <label class="query" for="query_term">
       </label>
-        <input name="query_term" type="text" class="input-just search-query" placeholder="Search for Term">
+        {{ render_field(s_form.query_term, placeholder="Search for Term", class="input-just search-query", type="text") }}
+        {{ render_field(s_form.query_tag, placeholder="Tags (separated by commas)", class="input-just search-query", type="text") }}
+        {{ render_field(s_form.query_location, placeholder="Location", class="input-just search-query", type="text") }}
+<!--         <input name="query_term" type="text" class="input-just search-query" placeholder="Search for Term">
         <input name="query_tag" type="text" class="input-just search-query" placeholder="Tags (separated by commas)">
         <input name="query_location" type="text" class="input-just search-query" placeholder="Location">
+ -->        
         <div class="input-append date" id="dp3" data-date="12-Mar-13" data-date-format="dd-M-yy">
-          <input class="span2" size="16" type="text" placeholder="dd-MMM-yy" name="query_date">
+          <!-- <input class="span2" size="16" type="text" placeholder="dd-MMM-yy" name="query_date"> -->
+          {{ render_field(s_form.query_date, placeholder="dd-MMM-yy", class="span2", size="16", type="text") }}
           <span class="add-on">
             <i class="icon-th"></i>
           </span>

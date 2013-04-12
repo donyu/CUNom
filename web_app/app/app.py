@@ -20,8 +20,13 @@ class LoginForm(Form):
     username = TextField('Username')
     password = PasswordField('Password')
     
-# functions to get manipulate database
+class SearchForm(Form):
+    query_term = TextField('query_term', default='')
+    query_tag = TextField('query_tag', default='')
+    query_location = TextField('query_location', default='')
+    query_date = TextField('query_date', default='')
 
+# functions to get manipulate database
 def get_friends():
     cursor = con.cursor()
     cursor.prepare('select u.username from Users u, friends_with fw where u.username = fw.person_2 and fw.person_1 = :session_user')
@@ -295,28 +300,26 @@ def login():
 @app.route('/food', methods=['GET', 'POST'])
 def food():
     events = []
+    if 's_form' not in session:
+        session['s_form'] = SearchForm()
     if request.method == 'POST':
-        keyword = request.form['query_term']
-        tag = request.form['query_tag']
-        location = request.form['query_location']
-        date = str(request.form['query_date']).upper()
+        session['s_form'] = SearchForm(request.form)
+    s_form = session['s_form']
+    keyword = s_form.query_term.data
+    tag = s_form.query_tag.data
+    location = s_form.query_location.data
+    date = str(s_form.query_date.data).upper()
 
-        events = get_events(keyword, tag, location, date)
-        events = [list(e) for e in events]
-        for event in events:
-            tags = get_tags(event)
-            event.append(tags)
-    else:
-        events = get_events("", "", "", "")
-        events = [list(e) for e in events]
-        for event in events:
-            tags = get_tags(event)
-            event.append(tags)
+    events = get_events(keyword, tag, location, date)
+    events = [list(e) for e in events]
+    for event in events:
+        tags = get_tags(event)
+        event.append(tags)
     if 'username' in session:
-        return render_template('listings.html', name = session['username'], events = events)
+        return render_template('listings.html', name = session['username'], events = events, s_form = session['s_form'])
     else:
         l_form = LoginForm()
-        return render_template('listings.html', events = events, l_form = l_form)
+        return render_template('listings.html', events = events, l_form = l_form, s_form = session['s_form'])
 
 
 def get_tags(event):
