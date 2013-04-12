@@ -194,6 +194,16 @@ def delete_favorite(favorite_id):
     # redirect back to previous page
     return redirect('/')
 
+@app.route('/add_favorite/<e_id>', methods=['POST'])
+def add_favorite(e_id):
+    cursor = con.cursor()
+    cursor.prepare('insert into favorited values(:session_user, :e_id)')
+    cursor.execute(None, {'session_user':session['username'], 'e_id':e_id})
+    con.commit()
+
+    # redirect back to previous page
+    return redirect('/')
+
 @app.route('/add_question', methods=['POST'])
 def add_question():
     # add friend relationship from database
@@ -350,6 +360,12 @@ def signup():
         c_args['new_user'] = request.form['username']
         c_args['new_email'] = request.form['email']
         signup_cursor.execute(None, c_args)
+
+        # insert into Preferences table
+        signup_cursor.execute('select max(p_id) from Preferences')
+        new_id = int(signup_cursor.fetchone()[0]) + 1
+        signup_cursor.execute('insert into Preferences values(:p_id, :on_or_off)', p_id = new_id, on_or_off = 0)
+        signup_cursor.execute('insert into hasPreferences values(:username, :p_id)', username = request.form['username'], p_id = new_id)
 
         # be sure to commit these inserts to db
         con.commit()
