@@ -74,6 +74,10 @@ def get_eprefs():
     cursor.execute(None, {'session_user':session['username']})
     return cursor.fetchall()
 
+def get_p_id():
+    cursor = con.cursor()
+    cursor.execute("select ")
+
 def is_user_subscribed():
     cursor = con.cursor()
     cursor.prepare(
@@ -204,6 +208,27 @@ def add_favorite(e_id):
     # redirect back to previous page
     return redirect('/')
 
+@app.route('/add_lpref/<l_id>', methods=['POST'])
+def add_lpref(l_id):
+    cursor = con.cursor()
+    curs
+    cursor.prepare('insert into values(:session_user, :e_id)')
+    cursor.execute(None, {'session_user':session['username'], 'e_id':e_id})
+    con.commit()
+
+    # redirect back to previous page
+    return redirect('/')
+
+@app.route('/add_epref/<e_id>', methods=['POST'])
+def add_epref(e_id):
+    cursor = con.cursor()
+    cursor.prepare('insert into favorited values(:session_user, :e_id)')
+    cursor.execute(None, {'session_user':session['username'], 'e_id':e_id})
+    con.commit()
+
+    # redirect back to previous page
+    return redirect('/')
+
 @app.route('/add_question', methods=['POST'])
 def add_question():
     # add friend relationship from database
@@ -249,11 +274,6 @@ def login():
             flash('Incorrect Login Credentials')
         return redirect('/')
 
-#event search form
-@app.route('/search')
-def search():
-    return render_template('search.html')
-
 #event listings page
 @app.route('/food', methods=['GET', 'POST'])
 def food():
@@ -261,7 +281,6 @@ def food():
     events = []
     if 'username' in session:
         if request.method == 'POST':
-            print 'hi'
             keyword = request.form['query_term']
             tag = request.form['query_tag']
             location = request.form['query_location']
@@ -295,10 +314,7 @@ def get_events(keyword, tag, location, dateof):
     dateof = '%' + dateof + '%'
     )
 
-    #cursor.execute(None, {'session_user':session['username']})
     return cursor.fetchall()
-
-
 
 @app.route('/logout')
 def logout():
