@@ -245,28 +245,64 @@ def search():
     return render_template('search.html')
 
 #event listings page
-@app.route('/food/<keywords>/<tags>/<location>/<date>')
-def list(keywords, tags, location, date):
+@app.route('/food', methods=['GET', 'POST'])
+def food():
     session['username'] = "don8yu"
+    events = []
     if 'username' in session:
-        events = get_events(keywords, tags, location, date)
-        return render_template('listings.html', name = session['username'], events = events)
+        if request.method == 'POST':
+            print 'hi'
+            keyword = request.form['query_term']
+            tag = request.form['query_tag']
+            location = request.form['query_location']
+            date = request.form['query_date']
+            events = get_events(keyword, tag, location, date)
+        else:
+            events = get_events("", "", "", "")
+    return render_template('listings.html', name = session['username'], events = events)
 
-
-def get_events(keywords, tags, location, date):
+def get_events(keyword, tag, location, date):
     cursor = con.cursor()
-    cursor.execute(
-        """
-        select *
-        from Events
-        """
-        )
+
+    if not keyword and not tag and not location and not date:
+        #list all
+        cursor.execute(
+                """
+                select distinct 
+                    Events.name, Events.description, Events.dateof, Tags.tag_name, Locations.name
+                from 
+                    Events, Tags, tagged_with, Locations, located
+                where 
+                    Events.e_id = tagged_with.e_id 
+                    and Tags.tag_name = tagged_with.tag_name
+                    and Locations.l_id = located.l_id
+                """
+                )
+    else:
+        cursor.execute(
+            """
+            select distinct 
+                Events.name, Events.description, Events.dateof, Tags.tag_name, Locations.name
+            from 
+                Events, Tags, tagged_with, Locations, located
+            where 
+                Events.e_id = tagged_with.e_id 
+                and Tags.tag_name = tagged_with.tag_name
+                and Locations.l_id = located.l_id
+
+                and Events.name like :keyword
+                and Tags.tag_name like :tag
+                and Locations.name like :location
+                and Events.dateof like :date
+            """,
+            keyword = '%' + keyword + '%',
+            tag = '%' + tag + '%',
+            location = '%' + location + '%',
+            date = '%' + date + '%'
+            )
+
     #cursor.execute(None, {'session_user':session['username']})
     return cursor.fetchall()
-
-
-
-
 
 
 
