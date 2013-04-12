@@ -206,6 +206,10 @@ def delete_favorite(favorite_id):
 @app.route('/add_favorite/<e_id>')
 def add_favorite(e_id):
     cursor = con.cursor()
+    cursor.execute('select e_id from favorited where e_id = :e_id and username = :session_user', session_user = session['username'], e_id = e_id)
+    if cursor.fetchone():
+        flash('You have already favorited this event')
+        return redirect('/food')
     cursor.prepare('insert into favorited values(:session_user, :e_id)')
     cursor.execute(None, {'session_user':session['username'], 'e_id':e_id})
     con.commit()
@@ -217,6 +221,10 @@ def add_favorite(e_id):
 def add_lpref(l_id):
     cursor = con.cursor()
     p_id = get_p_id()
+    cursor.execute('select p_id, l_id from preferredLocations where l_id = :l_id and p_id = :p_id', p_id = p_id, l_id = l_id)
+    if cursor.fetchone():
+        flash('You have already saved this as an location preference')
+        return redirect('/food')
     cursor.prepare('insert into preferredLocations values(:p_id, :l_id)')
     cursor.execute(None, {'p_id':p_id, 'l_id':l_id})
     con.commit()
@@ -228,6 +236,10 @@ def add_lpref(l_id):
 def add_epref(e_id):
     cursor = con.cursor()
     p_id = get_p_id()
+    cursor.execute('select e_id, p_id from preferredEvents where e_id = :e_id and p_id = :p_id', p_id = p_id, e_id = e_id)
+    if cursor.fetchone():
+        flash('You have already saved this as an event preference')
+        return redirect('/food')
     cursor.prepare('insert into preferredEvents values(:p_id, :e_id)')
     cursor.execute(None, {'p_id':p_id, 'e_id':e_id})
     con.commit()
@@ -283,7 +295,6 @@ def login():
 #event listings page
 @app.route('/food', methods=['GET', 'POST'])
 def food():
-    session['username'] = "don8yu"
     events = []
     if 'username' in session:
         if request.method == 'POST':
@@ -292,9 +303,28 @@ def food():
             location = request.form['query_location']
             date = request.form['query_date']
             events = get_events(keyword, tag, location, date)
+            events = [list(e) for e in events]
+            for event in events:
+                tags = get_tags(event)
+                event.append(tags)
         else:
             events = get_events("", "", "", "")
+            events = [list(e) for e in events]
+            for event in events:
+                tags = get_tags(event)
+                event.append(tags)
     return render_template('listings.html', name = session['username'], events = events)
+
+def get_tags(event):
+    cursor = con.cursor()
+    cursor.execute(
+        """
+        select t.tag_name from Tags t, Events e, tagged_with tw 
+        where e.e_id = tw.e_id and tw.tag_name = t.tag_name and e.e_id = :e_id
+        """,
+        e_id = event[4]
+        )
+    return cursor.fetchall()
 
 def get_events(keyword, tag, location, dateof):
     cursor = con.cursor()

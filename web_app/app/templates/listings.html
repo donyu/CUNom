@@ -51,10 +51,12 @@ CUNom - Free Food
               <p>
                 <i class="icon-calendar"></i> {{event[2]}}
                 | <i class="icon-share"></i> {{event[3]}}
-                | <i class="icon-tags"></i> Tags : <a href="#"><span class="label label-info">Snipp</span></a> 
-                <a href="#"><span class="label label-info">Bootstrap</span></a> 
-                <a href="#"><span class="label label-info">UI</span></a> 
-                <a href="#"><span class="label label-info">growth</span></a>
+                | <i class="icon-tags"></i> Tags : 
+                {% if event[6] %}
+                  {% for tag in event[6] %}
+                    <span class="label label-info">{{tag[0]}}</span>
+                  {% endfor %}
+                {% endif %}
               </p>
             </div>
           </div>
