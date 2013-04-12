@@ -294,19 +294,22 @@ def get_events(keyword, tag, location, dateof):
     cursor = con.cursor()
     cursor.execute(
     """
-    select distinct 
-        Events.name, Events.description, Events.dateof, Tags.tag_name, Locations.name
+    select 
+        Events.name, Events.description, Events.dateof, Locations.name
     from 
         Events, Tags, tagged_with, Locations, located
-    where 
+    where
         Events.e_id = tagged_with.e_id 
         and Tags.tag_name = tagged_with.tag_name
         and Locations.l_id = located.l_id
-
+        and located.e_id = Events.e_id
+        
         and Events.name like :keyword
         and Tags.tag_name like :tag
         and Locations.name like :location
         and Events.dateof like :dateof
+    group by
+        Events.name, Events.description, Events.dateof, Locations.name
     """,
     keyword = '%' + keyword + '%',
     tag = '%' + tag + '%',
