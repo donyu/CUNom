@@ -1,3 +1,17 @@
+create type image as object (
+	idno integer,
+	alt_text varchar2(30),
+	src varchar2(30),
+	map member function 
+
+) not final;
+
+create type profile_image under image (
+	username varchar2(30),
+	thumbnail_src varchar2(30),
+	overriding member function show_alt return varchar2
+) not final;
+
 create table Users(
 	username varchar2(30) primary key,
 	password varchar2(30) check (length(password) > 3)
