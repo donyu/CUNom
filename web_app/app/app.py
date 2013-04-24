@@ -1,6 +1,6 @@
 import cx_Oracle
 from flask import Flask, flash, render_template, redirect, request, session
-from wtforms import Form, BooleanField, TextField, PasswordField, validators
+from wtforms import Form, SelectMultipleField, BooleanField, TextField, PasswordField, validators, widgets, RadioField
 
 app = Flask(__name__)
 
@@ -15,6 +15,20 @@ dsn = cx_Oracle.makedsn(host, port, sid)
 # connect and test
 con = cx_Oracle.connect(user, pswd, dsn)
 
+def get_locations():
+    cursor = con.cursor()
+    cursor.execute('select name from Locations ')
+    locations = cursor.fetchall()
+    locations = [(l[0], l[0]) for l in locations]
+    return locations
+
+def get_tags():
+    cursor = con.cursor()
+    cursor.execute('select tag_name from Tags ')
+    tags = cursor.fetchall()
+    tags = [(t[0], t[0]) for t in tags]
+    return tags
+
 # login form here
 class LoginForm(Form):
     username = TextField('Username')
@@ -22,11 +36,14 @@ class LoginForm(Form):
     
 class SearchForm(Form):
     query_term = TextField('query_term', default='')
-    query_tag = TextField('query_tag', default='')
-    query_location = TextField('query_location', default='')
+    # query_tag = TextField('query_tag', default='')
+    query_tag = SelectMultipleField('query_location', choices=get_tags())
+    # query_location = TextField('query_location', default='')
+    query_location = SelectMultipleField('query_location', choices=get_locations())
     query_date = TextField('query_date', default='')
 
 # functions to get manipulate database
+
 def get_friends():
     cursor = con.cursor()
     cursor.prepare('select u.username from Users u, friends_with fw where u.username = fw.person_2 and fw.person_1 = :session_user')
@@ -136,6 +153,7 @@ def preferences():
         l_prefs = get_lprefs()
         s_questions = get_squestions()
         subscribed = is_user_subscribed()
+        print subscribed
         p_on_off = get_p_on_off()
         email = get_email()
         return render_template('preferences.html', name = session['username'], p_on_off = p_on_off, s_questions = s_questions, l_prefs = l_prefs, e_prefs = e_prefs, email = email, subscribed = subscribed)
@@ -146,10 +164,20 @@ def change_email():
     email = request.form['email']
     past_email = get_email()[0]
     subscribed = request.form['subscribed_select']
-    subscribed = 1 if subscribed == "Yes" else 0
+    if subscribed == "Yes":
+        subscribed = 1
+    else:
+        subscribed = 0
+
+    # check if these settings already exist
+    cursor = con.cursor()
+    cursor.prepare('select address, subscribed from Emails where address = :email')
+    cursor.execute(None, {'email':email})
+    if cursor.fetchone():
+        cursor.execute('update Emails set subscribed = :subscribed where address = :email', email=email, subscribed=subscribed)
+        return redirect('/preferences')
 
     # change email settings for user
-    cursor = con.cursor()
     cursor.prepare('insert into Emails values(:email, :subscribed)')
     cursor.execute(None, {'email':email, 'subscribed':subscribed})
 
@@ -356,72 +384,59 @@ def get_tags(event):
 
 def get_events(keyword, tag, location, dateof):
     cursor = con.cursor()
+    query_str = """
+    select 
+        Events.name, Events.description, Events.dateof, Locations.name, Events.e_id, Locations.l_id, Locations.address, Locations.directions
+    from 
+        Events, Tags, tagged_with, Locations, located
+    where
+        Events.e_id = tagged_with.e_id 
+        and Tags.tag_name = tagged_with.tag_name
+        and Locations.l_id = located.l_id
+        and located.e_id = Events.e_id
+    """
+    query_str += "and (Events.name like :keyword or Events.description like :keyword) "
     if tag:
-        # create tag array
-        tag = [t.encode('utf8').strip() for t in tag.split(',')]
-        tag_str = ''
-        for t in tag:
-            tag_str += t + ", "
-        tag_str = tag_str[:len(tag_str) - 2]
-        print tag_str
-        query_str = """
-        select 
-            Events.name, Events.description, Events.dateof, Locations.name, Events.e_id, Locations.l_id, Locations.address, Locations.directions
-        from 
-            Events, Tags, tagged_with, Locations, located
-        where
-            Events.e_id = tagged_with.e_id 
-            and Tags.tag_name = tagged_with.tag_name
-            and Locations.l_id = located.l_id
-            and located.e_id = Events.e_id
-        """
-        query_str += "and (Events.name like :keyword or Events.description like :keyword) "
         query_str += "and Tags.tag_name in "
         query_str += "("
         for t in tag[:len(tag) - 1]:
             query_str += ":" + t.split()[0] + ", "
         query_str += ":" + tag[len(tag) - 1].split()[0]
-        query_str += ") and Locations.name like :location and Events.dateof like :dateof"
-        query_str += " group by Events.name, Events.description, Events.dateof, Locations.name, Events.e_id, Locations.l_id, Locations.address, Locations.directions"
-        print query_str
-        cursor.prepare(query_str)
-        c_args = {}
-        c_args['keyword'] = '%' + keyword + '%'
+        query_str += ") "
+    if location:
+        query_str += "and Locations.name in "
+        query_str += "("
+        i = 0
+        for l in location[:len(location) - 1]:
+            query_str += ":" + l.split()[0] + str(i) + ", "
+            i += 1
+        query_str += ":" + location[len(location) - 1].split()[0] + str(i)
+        query_str += ") " 
+    query_str += "and Events.dateof like :dateof"
+    query_str += " group by Events.name, Events.description, Events.dateof, Locations.name, Events.e_id, Locations.l_id, Locations.address, Locations.directions"
+    print query_str
+    cursor.prepare(query_str)
+    c_args = {}
+    c_args['keyword'] = '%' + keyword + '%'
 
+    if tag:
         for t in tag:
             c_args[t.split()[0]] = t
-        c_args['location'] = '%' + location + '%'
-        c_args['dateof'] = '%' + dateof + '%'
-        print c_args
-        cursor.execute(None, c_args)
-    else:
-        cursor.execute(
-        """
-        select 
-            Events.name, Events.description, Events.dateof, Locations.name, Events.e_id, Locations.l_id, Locations.address, Locations.directions
-        from 
-            Events, Tags, tagged_with, Locations, located
-        where
-            Events.e_id = tagged_with.e_id 
-            and Tags.tag_name = tagged_with.tag_name
-            and Locations.l_id = located.l_id
-            and located.e_id = Events.e_id
-            
-            and (Events.name like :keyword or Events.description like :keyword)
-            and Locations.name like :location
-            and Events.dateof like :dateof
-        group by
-            Events.name, Events.description, Events.dateof, Locations.name, Events.e_id, Locations.l_id, Locations.address, Locations.directions
-        """,
-        keyword = '%' + keyword + '%',
-        location = '%' + location + '%',
-        dateof = '%' + dateof + '%'
-        )
+    if location:
+        i = 0
+        for l in location:
+            c_args[l.split()[0] + str(i)] = l
+            i += 1
+    c_args['dateof'] = '%' + dateof + '%'
+    print c_args
+    cursor.execute(None, c_args)
     return cursor.fetchall()
 
 @app.route('/logout')
 def logout():
     del session['username']
+    if 's_form' in session:
+        del session['s_form']
     return redirect('/') 
 
 @app.route('/signup', methods=['POST'])

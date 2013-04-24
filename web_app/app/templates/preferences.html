@@ -20,10 +20,10 @@
 		  <h5>Email Settings</h5>
 	    	<form method = "post" action = "/change_email">
 	    		<input class="prependedInput" size="16" type="email" name="email" value={{email[0]}}>
-	    		<label for="subscribed_select">Sort by:</label>
+	    		<label for="subscribed_select">Subcribed to Weekly Emails: </label>
 	    		<select id="subscribed_select" name="subscribed_select" style="width:150px">
-	    		    <option "{{ 'selected="selected"' if subscribed }}">Yes</option>
-	    		    <option "{{ 'selected="selected"' if not subscribed }}">No</option>
+	    		    <option {{'selected' if subscribed[0] == 1}}>Yes</option>
+	    		    <option {{'selected' if subscribed[0] == 0}}>No</option>
 	    		</select>
 	    		<input class="btn btn-primary btn-block" type="submit" id="sign-in" value="Update Email Settings">
       	</form>
