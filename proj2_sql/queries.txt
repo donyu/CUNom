@@ -1,1 +1,3 @@
 select u.prof_image.get_thumbnail(), u.prof_image.show_alt() from Users u where u.username = 'sbchou';
+
+select u.username, u.prof_image.get_thumbnail(), u.prof_image.show_alt() from Users u, friends_with fw where u.username = fw.person_2 and fw.person_1 = 'sbchou';
