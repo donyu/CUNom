@@ -27,3 +27,7 @@ drop table preferredEvents;
 drop table preferredLocations;
 
 drop table hasPreferences;
+
+drop type profile_image;
+
+drop type image;

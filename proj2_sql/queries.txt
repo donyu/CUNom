@@ -1,0 +1,1 @@
+select prof_image.get_thumbnail(), prof_image.show_alt() from Users where username = 'sbchou';
