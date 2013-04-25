@@ -7,14 +7,14 @@ create type image as object (
 ) not final;
 
 create type profile_image under image (
-	username varchar2(30),
 	thumbnail_src varchar2(30),
 	overriding member function show_alt return varchar2
 ) not final;
 
 create table Users(
 	username varchar2(30) primary key,
-	password varchar2(30) check (length(password) > 3)
+	password varchar2(30) check (length(password) > 3),
+	prof_pic profile_image
 );
 
 create table Emails(
@@ -50,7 +50,8 @@ create table Events(
 	e_id integer primary key,
 	name varchar2(100),
 	description varchar2(1000),
-	dateof date
+	dateof date,
+	event_img image
 );
 
 create table favorited(
