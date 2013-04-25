@@ -1,1 +1,1 @@
-select prof_image.get_thumbnail(), prof_image.show_alt() from Users where username = 'sbchou';
+select u.prof_image.get_thumbnail(), u.prof_image.show_alt() from Users u where u.username = 'sbchou';
