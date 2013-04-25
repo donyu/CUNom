@@ -1,14 +1,14 @@
 -- sample users
-insert into Users values('sbchou', 'password');
-insert into Users values('don8yu', 'password');
-insert into Users values('don4yu', 'password');
-insert into Users values('alice01', 'password');
-insert into Users values('cleobc', 'password');
-insert into Users values('caroline', 'password');
-insert into Users values('sunnylinda', 'password');
-insert into Users values('tricepat', 'password');
-insert into Users values('stephzhou', 'password');
-insert into Users values('cmoscardi', 'password');
+insert into Users values('sbchou', 'password', profile_image(1, 'this is my face', 'img/profpic.jpg', 'img/thumbnail.jpg'));
+insert into Users values('don8yu', 'password', profile_image(2, 'this is my face', 'img/profpic.jpg', 'img/thumbnail.jpg'));
+insert into Users values('don4yu', 'password', profile_image(3, 'this is my face', 'img/profpic.jpg', 'img/thumbnail.jpg'));
+insert into Users values('alice01', 'password', profile_image(4, 'this is my face', 'img/profpic.jpg', 'img/thumbnail.jpg'));
+insert into Users values('cleobc', 'password', profile_image(5, 'this is my face', 'img/profpic.jpg', 'img/thumbnail.jpg'));
+insert into Users values('caroline', 'password', profile_image(6, 'this is my face', 'img/profpic.jpg', 'img/thumbnail.jpg'));
+insert into Users values('sunnylinda', 'password', profile_image(7, 'this is my face', 'img/profpic.jpg', 'img/thumbnail.jpg'));
+insert into Users values('tricepat', 'password', profile_image(8, 'this is my face', 'img/profpic.jpg', 'img/thumbnail.jpg'));
+insert into Users values('stephzhou', 'password', profile_image(9, 'this is my face', 'img/profpic.jpg', 'img/thumbnail.jpg'));
+insert into Users values('cmoscardi', 'password', profile_image(10, 'this is my face', 'img/profpic.jpg', 'img/thumbnail.jpg'));
 
 insert into Emails values('sbchou@gmail.com', 1);
 insert into Emails values('donyu8@gmail.com', 1);
