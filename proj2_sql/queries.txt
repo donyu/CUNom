@@ -1,1 +1,3 @@
 select u.prof_image.get_thumbnail(), u.prof_image.show_alt() from Users u where u.username = 'sbchou';
+
+SELECT E.event_image.show_alt(), E.event_image.get_src() FROM Events E
