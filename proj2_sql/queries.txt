@@ -1,3 +1,12 @@
+Don Yu dy2212
+Sophie Chou sbc2125
+
+-- query to get the profile image for a user (i.e. sbchou)
 select u.prof_image.get_thumbnail(), u.prof_image.show_alt() from Users u where u.username = 'sbchou';
 
+--- query to get all of the friends for a user (i.e. sbchou).
+--- this will be used to display a list of a user's friends
+--- with thumbnail pictures alongside usernames
 select u.username, u.prof_image.get_thumbnail(), u.prof_image.show_alt() from Users u, friends_with fw where u.username = fw.person_2 and fw.person_1 = 'sbchou';
+
+SELECT E.event_image.show_alt(), E.event_image.get_src() FROM Events E
